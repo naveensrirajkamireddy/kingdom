@@ -1,0 +1,7 @@
+{
+  "name": "kingdom",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
