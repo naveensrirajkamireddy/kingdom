@@ -1,9 +1,78 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
 
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-*, ion-label {
-    font-family: 'Jost', sans-serif !important;
+*, ion-label, ion-button {
+    font-family: 'Lato',sans-serif !important;
 }
+  .container-fluid {
+    max-width: 1350px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section-title {
+    text-align: center;
+    position: relative;
+    font-size: 2rem;
+    margin: 3rem 0;
+    font-weight: 700;
+    color: #222;
+    /* letter-spacing: 1px; */
+    /* text-transform: uppercase; */
+  }
+  
+  .section-title::before,
+  .section-title::after {
+    content: "";
+    position: absolute;
+    top: 120%;
+    height: 1.5px;
+    width: 90px;
+  }
+  
+  .section-title::before {
+    left: calc(50% - 90px);
+    background: linear-gradient(to right, transparent, #a01);
+  }
+  
+  .section-title::after {
+    right: calc(50% - 90px);
+    background: linear-gradient(to left, transparent, #a01);
+  }
+  
+  /* Optional: animation */
+  .section-title {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive adjustment */
+  @media (max-width: 576px) {
+    .section-title::before,
+    .section-title::after {
+      width: 50px;
+    }
+  
+    .section-title::before {
+      left: calc(50% - 60px);
+    }
+  
+    .section-title::after {
+      right: calc(50% - 60px);
+    }
+  }
+
+  ion-accordion::part(indicator) {
+    display: none !important;
+  }
+  

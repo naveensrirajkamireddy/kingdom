@@ -1,0 +1,7 @@
+query GetMyBrands {
+  getMyBrands {
+    id
+    brandName
+    status
+  }
+}

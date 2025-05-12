@@ -1,0 +1,8 @@
+
+/* Prevent logo from being too large on mobile */
+@media (max-width: 768px) {
+    .navbar-brand img {
+      width: 100px !important;
+    }
+  }
+  

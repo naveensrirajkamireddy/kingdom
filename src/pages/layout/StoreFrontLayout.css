@@ -1,0 +1,88 @@
+@media (min-width: 768px) {
+    ion-menu {
+      display: none;
+    }
+  }
+/* Ensure the toolbar/header allows dropdown to show above */
+.storefront-header {
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+  }
+  
+  /* Megamenu dropdown customization */
+  .megamenu .dropdown-menu {
+    display: block; /* Required for position tweaking */
+    position: absolute !important;
+    top: 100%; /* Below the button */
+    left: 0;
+    margin-top: 0px;
+    transform: translateY(10px); /* Slight downward shift */
+    width: 500px;
+    padding: 1rem 1.5rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+  }
+  
+  /* Columns inside megamenu */
+  .megamenu-column {
+    min-width: 200px;
+  }
+  
+  .megamenu-column h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  /* Megamenu items */
+  .megamenu .dropdown-item {
+    padding: 0.25rem 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
+  
+  .megamenu .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #000;
+  }
+  
+/* Let scroll container behave normally */
+/* .storefront-content {
+  padding-top: 100px !important; /* 56px is typical toolbar height */
+/* } */ */
+
+ion-content::part(scroll) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.inner-content {
+  display: flex;
+  flex-direction: column;
+  padding-top: 100px !important;
+  flex: 1;
+  min-height: 100%;
+}
+
+.inner-content .container-fluid {
+  flex: 1;
+}
+
+/* Remove sticky behavior */
+.page-footer {
+  padding: 1rem 0;
+  background-color: #f8f9fa;
+  border-top: 1px solid #ddd;
+  font-size: 0.9rem;
+  margin-top: auto;
+  position: static !important; /* <-- this removes any sticky/fixed effect */
+  z-index: 1 !important;     /* <-- no overlap */
+}
+
+
+  

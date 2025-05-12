@@ -1,0 +1,10 @@
+query GetCategories($parentMenu: String!) {
+  getCategories(parentMenu: $parentMenu) {
+    id
+    categoryName
+    parentCategory
+    image
+    parentCategoryName
+    status
+  }
+}

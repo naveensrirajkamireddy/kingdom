@@ -1,34 +1,60 @@
 import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonButton,
   IonButtons,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
+import { Navbar, Nav, Offcanvas, Container } from "react-bootstrap";
+import { useState } from "react";
+import "./AppHeader.css";
 
 const AppHeader: React.FC = () => {
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
-    <IonHeader>
+    <IonHeader className="fixed-top">
       <IonToolbar>
-        <IonTitle>
-          {/* The<b>Kingdom</b>Fashion */}
-          <img
-            src="./kingdom-logo.png"
-            className="p-4"
-            style={{ width: "18%" }}
+        {/* <Container> */}
+        <Navbar expand="md" className="w-100" bg="light" variant="light">
+          <Navbar.Toggle
+            aria-controls="offcanvasNavbar"
+            onClick={() => setShowMenu(true)}
           />
-        </IonTitle>
-        <IonButtons slot="end">
-          <IonButton>Home</IonButton>
-          <IonButton>Shop</IonButton>
-          <IonButton>Mens Wear</IonButton>
-          <IonButton>Womens Wear</IonButton>
-          <IonButton>Kids Wear</IonButton>
-          <IonButton>Accessories</IonButton>
-          <IonButton color={"danger"} fill="solid">
-            Login/Signup
-          </IonButton>
-        </IonButtons>
+          <Navbar.Brand href="#">
+            <img
+              src="./kingdom-logo.png"
+              alt="logo"
+              style={{ width: "15%", padding: "5px" }}
+            />
+          </Navbar.Brand>
+
+          <Navbar.Offcanvas
+            id="offcanvasNavbar"
+            aria-labelledby="offcanvasNavbarLabel"
+            placement="start"
+            show={showMenu}
+            onHide={() => setShowMenu(false)}
+          >
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title id="offcanvasNavbarLabel">
+                Kingdom Fashion
+              </Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="justify-content-end flex-grow-1 pe-3">
+                <Nav.Link href="#">Home</Nav.Link>
+                <Nav.Link href="#">Shop</Nav.Link>
+                <Nav.Link href="#">Men's Wear</Nav.Link>
+                <Nav.Link href="#">Women's Wear</Nav.Link>
+                <Nav.Link href="#">Kid's Wear</Nav.Link>
+                <Nav.Link href="#">Accessories</Nav.Link>
+                <Nav.Link href="#">Login / Signup</Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Navbar.Offcanvas>
+        </Navbar>
+        {/* </Container> */}
       </IonToolbar>
     </IonHeader>
   );
