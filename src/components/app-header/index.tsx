@@ -49,7 +49,7 @@ const AppHeader: React.FC = () => {
                 <Nav.Link href="#">Women's Wear</Nav.Link>
                 <Nav.Link href="#">Kid's Wear</Nav.Link>
                 <Nav.Link href="#">Accessories</Nav.Link>
-                <Nav.Link href="#">Login / Signup</Nav.Link>
+                <Nav.Link href="#">Login / Register</Nav.Link>
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>

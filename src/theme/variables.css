@@ -1,11 +1,15 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 *, ion-label, ion-button {
-    font-family: 'Lato',sans-serif !important;
+    font-family: 'Jost',sans-serif !important;
+}
+
+ion-button {
+  text-transform: capitalize;
 }
   .container-fluid {
     max-width: 1350px;
@@ -76,3 +80,14 @@ http://ionicframework.com/docs/theming/ */
     display: none !important;
   }
   
+/* Chrome, Safari, Edge, Opera */
+.no-spinner input::-webkit-outer-spin-button,
+.no-spinner input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.no-spinner input[type=number] {
+  -moz-appearance: textfield;
+}

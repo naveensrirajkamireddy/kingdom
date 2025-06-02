@@ -1,0 +1,10 @@
+mutation LoginCustomer($password: String!, $username: String!) {
+  loginCustomer(password: $password, username: $username) {
+    customerId
+    customerName
+    email
+    mobile
+    address
+    status
+  }
+}

@@ -1,0 +1,63 @@
+/* LoginModal.css */
+.login-modal::part(content) {
+  /* --width: 55%; */
+  /* --min-height:  */
+  --min-width: 500px;
+  --border-radius: 12px;
+  height: 80%;
+}
+
+.login-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-image {
+  flex: 1;
+  background-image: url("/loginBg.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  display: block;
+}
+
+.login-form {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .login-image {
+    display: none;
+  }
+
+  .login-form {
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .login-modal::part(content) {
+    --width: 100%;
+    --max-width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+}

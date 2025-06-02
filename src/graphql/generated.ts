@@ -57,6 +57,24 @@ export type CategryOutput = {
   status: Scalars['Boolean']['output'];
 };
 
+export type CustomerInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  customerName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  mobile: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type CustomerOutput = {
+  __typename?: 'CustomerOutput';
+  address?: Maybe<Scalars['String']['output']>;
+  customerId: Scalars['String']['output'];
+  customerName: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  mobile: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type ImageOutput = {
   __typename?: 'ImageOutput';
   id: Scalars['Int']['output'];
@@ -110,6 +128,7 @@ export type Menus = {
 export type Mutation = {
   __typename?: 'Mutation';
   assignRoleAccess: Array<RoleAccess>;
+  createCustomer: CustomerOutput;
   createOrUpdateBrand: Brands;
   createOrUpdateCategory: Categories;
   createOrUpdateMaterial: Material;
@@ -118,6 +137,7 @@ export type Mutation = {
   createOrUpdateRole: Roles;
   createOrUpdateUser: UserOutput;
   createOrUpdateVendor: Vendors;
+  createSlider: Sliders;
   createSuperUser: User;
   deactivateRole: Scalars['Boolean']['output'];
   deactivateUser: Scalars['Boolean']['output'];
@@ -128,15 +148,22 @@ export type Mutation = {
   deletePatterns: Scalars['Boolean']['output'];
   deleteProduct: Scalars['Boolean']['output'];
   deleteRole: Scalars['Boolean']['output'];
+  deleteSlider: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   deleteVendor: Scalars['Boolean']['output'];
   login: LoginOutput;
+  loginCustomer: CustomerOutput;
   saveProduct: Products;
 };
 
 
 export type MutationAssignRoleAccessArgs = {
   input: RoleAccessBulkInput;
+};
+
+
+export type MutationCreateCustomerArgs = {
+  input: CustomerInput;
 };
 
 
@@ -177,6 +204,11 @@ export type MutationCreateOrUpdateUserArgs = {
 
 export type MutationCreateOrUpdateVendorArgs = {
   input: VendorsInput;
+};
+
+
+export type MutationCreateSliderArgs = {
+  input: SlidersInput;
 };
 
 
@@ -225,6 +257,11 @@ export type MutationDeleteRoleArgs = {
 };
 
 
+export type MutationDeleteSliderArgs = {
+  sliderId: Scalars['Float']['input'];
+};
+
+
 export type MutationDeleteUserArgs = {
   userId: Scalars['String']['input'];
 };
@@ -236,6 +273,12 @@ export type MutationDeleteVendorArgs = {
 
 
 export type MutationLoginArgs = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+
+export type MutationLoginCustomerArgs = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
@@ -355,6 +398,7 @@ export type Query = {
   getRoleAccess: Array<RoleAccess>;
   getRoleName: Scalars['String']['output'];
   getRoles: Array<Roles>;
+  getSliders: Array<Sliders>;
   getUserByID: User;
   getUsersByRole: Array<UserOutput>;
   getVendorByID: Vendors;
@@ -445,6 +489,18 @@ export type RolesInput = {
   status?: Scalars['Boolean']['input'];
 };
 
+export type Sliders = {
+  __typename?: 'Sliders';
+  id: Scalars['Int']['output'];
+  imageUrl: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
+export type SlidersInput = {
+  imageUrl: Scalars['String']['input'];
+  status: Scalars['Boolean']['input'];
+};
+
 export type User = {
   __typename?: 'User';
   address: Scalars['String']['output'];
@@ -529,6 +585,13 @@ export type LoginOutput = {
   username: Scalars['String']['output'];
 };
 
+export type CreateCustomerMutationVariables = Exact<{
+  input: CustomerInput;
+}>;
+
+
+export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'CustomerOutput', customerId: string, customerName: string, email: string, mobile: string, address?: string | null, status: boolean } };
+
 export type GetCategoriesQueryVariables = Exact<{
   parentMenu: Scalars['String']['input'];
 }>;
@@ -541,7 +604,58 @@ export type GetMyBrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMyBrandsQuery = { __typename?: 'Query', getMyBrands: Array<{ __typename?: 'Brands', id: number, brandName: string, status: boolean }> };
 
+export type GetSlidersQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type GetSlidersQuery = { __typename?: 'Query', getSliders: Array<{ __typename?: 'Sliders', id: number, imageUrl: string, status: boolean }> };
+
+export type LoginCustomerMutationVariables = Exact<{
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+}>;
+
+
+export type LoginCustomerMutation = { __typename?: 'Mutation', loginCustomer: { __typename?: 'CustomerOutput', customerId: string, customerName: string, email: string, mobile: string, address?: string | null, status: boolean } };
+
+
+export const CreateCustomerDocument = gql`
+    mutation CreateCustomer($input: CustomerInput!) {
+  createCustomer(input: $input) {
+    customerId
+    customerName
+    email
+    mobile
+    address
+    status
+  }
+}
+    `;
+export type CreateCustomerMutationFn = Apollo.MutationFunction<CreateCustomerMutation, CreateCustomerMutationVariables>;
+
+/**
+ * __useCreateCustomerMutation__
+ *
+ * To run a mutation, you first call `useCreateCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCustomerMutation, { data, loading, error }] = useCreateCustomerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCustomerMutation(baseOptions?: Apollo.MutationHookOptions<CreateCustomerMutation, CreateCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCustomerMutation, CreateCustomerMutationVariables>(CreateCustomerDocument, options);
+      }
+export type CreateCustomerMutationHookResult = ReturnType<typeof useCreateCustomerMutation>;
+export type CreateCustomerMutationResult = Apollo.MutationResult<CreateCustomerMutation>;
+export type CreateCustomerMutationOptions = Apollo.BaseMutationOptions<CreateCustomerMutation, CreateCustomerMutationVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories($parentMenu: String!) {
   getCategories(parentMenu: $parentMenu) {
@@ -628,3 +742,83 @@ export type GetMyBrandsQueryHookResult = ReturnType<typeof useGetMyBrandsQuery>;
 export type GetMyBrandsLazyQueryHookResult = ReturnType<typeof useGetMyBrandsLazyQuery>;
 export type GetMyBrandsSuspenseQueryHookResult = ReturnType<typeof useGetMyBrandsSuspenseQuery>;
 export type GetMyBrandsQueryResult = Apollo.QueryResult<GetMyBrandsQuery, GetMyBrandsQueryVariables>;
+export const GetSlidersDocument = gql`
+    query GetSliders {
+  getSliders {
+    id
+    imageUrl
+    status
+  }
+}
+    `;
+
+/**
+ * __useGetSlidersQuery__
+ *
+ * To run a query within a React component, call `useGetSlidersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSlidersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSlidersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSlidersQuery(baseOptions?: Apollo.QueryHookOptions<GetSlidersQuery, GetSlidersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSlidersQuery, GetSlidersQueryVariables>(GetSlidersDocument, options);
+      }
+export function useGetSlidersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSlidersQuery, GetSlidersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSlidersQuery, GetSlidersQueryVariables>(GetSlidersDocument, options);
+        }
+export function useGetSlidersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSlidersQuery, GetSlidersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSlidersQuery, GetSlidersQueryVariables>(GetSlidersDocument, options);
+        }
+export type GetSlidersQueryHookResult = ReturnType<typeof useGetSlidersQuery>;
+export type GetSlidersLazyQueryHookResult = ReturnType<typeof useGetSlidersLazyQuery>;
+export type GetSlidersSuspenseQueryHookResult = ReturnType<typeof useGetSlidersSuspenseQuery>;
+export type GetSlidersQueryResult = Apollo.QueryResult<GetSlidersQuery, GetSlidersQueryVariables>;
+export const LoginCustomerDocument = gql`
+    mutation LoginCustomer($password: String!, $username: String!) {
+  loginCustomer(password: $password, username: $username) {
+    customerId
+    customerName
+    email
+    mobile
+    address
+    status
+  }
+}
+    `;
+export type LoginCustomerMutationFn = Apollo.MutationFunction<LoginCustomerMutation, LoginCustomerMutationVariables>;
+
+/**
+ * __useLoginCustomerMutation__
+ *
+ * To run a mutation, you first call `useLoginCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginCustomerMutation, { data, loading, error }] = useLoginCustomerMutation({
+ *   variables: {
+ *      password: // value for 'password'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useLoginCustomerMutation(baseOptions?: Apollo.MutationHookOptions<LoginCustomerMutation, LoginCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginCustomerMutation, LoginCustomerMutationVariables>(LoginCustomerDocument, options);
+      }
+export type LoginCustomerMutationHookResult = ReturnType<typeof useLoginCustomerMutation>;
+export type LoginCustomerMutationResult = Apollo.MutationResult<LoginCustomerMutation>;
+export type LoginCustomerMutationOptions = Apollo.BaseMutationOptions<LoginCustomerMutation, LoginCustomerMutationVariables>;

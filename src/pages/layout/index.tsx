@@ -13,12 +13,21 @@ import {
   IonPage,
   IonIcon,
   IonLabel,
+  IonButton,
+  IonModal,
 } from "@ionic/react";
-import { menuOutline, cartOutline, personCircleOutline } from "ionicons/icons";
+import {
+  menuOutline,
+  cartOutline,
+  personCircleOutline,
+  powerOutline,
+} from "ionicons/icons";
 import { ReactNode, useEffect, useState } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "./StoreFrontLayout.css";
+import LoginModal from "../loginModal/loginModal";
+import { logout, useUser } from "../../context/userContext";
 
 interface StorefrontLayoutProps {
   children: ReactNode;
@@ -26,6 +35,12 @@ interface StorefrontLayoutProps {
 
 const StorefrontLayout: React.FC<StorefrontLayoutProps> = ({ children }) => {
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 992);
+  const { user, setUser } = useUser();
+  const navigate = useHistory();
+  const handleLogout = () => {
+    logout(setUser);
+    navigate.push("/home");
+  };
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 992);
@@ -33,6 +48,8 @@ const StorefrontLayout: React.FC<StorefrontLayoutProps> = ({ children }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  const [showLogin, setShowLogin] = useState(false);
   return (
     <IonApp>
       {/* Mobile Menu */}
@@ -96,14 +113,45 @@ const StorefrontLayout: React.FC<StorefrontLayoutProps> = ({ children }) => {
                       <Nav.Link as={Link} to="/contact">
                         Contact
                       </Nav.Link>
+                      <IonButton
+                        fill="clear"
+                        onClick={() => navigate.push("/cart")}
+                        color={"dark"}
+                      >
+                        <IonIcon icon={cartOutline} /> Cart
+                      </IonButton>
+                      {/* Cart and User Icons */}
+                      {user ? (
+                        <>
+                          <IonButton
+                            fill="clear"
+                            onClick={() => navigate.push("/account")}
+                            color={"dark"}
+                          >
+                            <IonIcon icon={personCircleOutline} size="small" />
+                            &nbsp;{user.customerName}
+                          </IonButton>
+                          <IonButton
+                            fill="clear"
+                            onClick={handleLogout}
+                            color={"dark"}
+                          >
+                            <IonIcon icon={powerOutline} />
+                          </IonButton>
+                        </>
+                      ) : (
+                        <IonButton
+                          fill="clear"
+                          onClick={() => setShowLogin(true)}
+                          color={"dark"}
+                        >
+                          <IonIcon icon={personCircleOutline} size="small" />
+                          &nbsp;Signin/Signup
+                        </IonButton>
+                      )}
                     </Nav>
                   </Navbar>
                 )}
-                {/* Cart and User Icons */}
-                <div className="d-flex gap-3 align-items-center">
-                  <IonIcon icon={cartOutline} size="large" />
-                  <IonIcon icon={personCircleOutline} size="large" />
-                </div>
               </div>
             </Container>
           </IonToolbar>
@@ -111,6 +159,9 @@ const StorefrontLayout: React.FC<StorefrontLayoutProps> = ({ children }) => {
 
         {/* Content Section */}
         <IonContent className="storefront-content">{children}</IonContent>
+
+        {/* Modal Starts  */}
+        <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
 
         {/* Footer */}
         {/* <IonFooter>

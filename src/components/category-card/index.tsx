@@ -14,10 +14,6 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ id, name, image }) => {
         src={image}
         alt={name}
         className="product-image"
-        onError={(e) =>
-          (e.currentTarget.src =
-            "https://via.placeholder.com/300x400?text=Image+Not+Found")
-        }
       />
       <div className="product-overlay">
         <div className="product-info">
