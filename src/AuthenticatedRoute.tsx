@@ -4,13 +4,11 @@ interface AuthenticationProps {
   component: React.ComponentType<any>;
   [key: string]: any;
 }
-console.log("AuthenticationRoute file loaded");
 const AuthenticationRoute: React.FC<AuthenticationProps> = ({
   component: Component,
   ...rest
 }) => {
   const isAuthenticated = !!sessionStorage.getItem("isLoggedIn");
-  console.log("isAuthenticated", isAuthenticated)
   return (
     <Route
       {...rest}

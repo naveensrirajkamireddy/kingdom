@@ -1,0 +1,38 @@
+query SingleProduct($singleProductId: String!) {
+  singleProduct(id: $singleProductId) {
+    id
+    productName
+    description
+    status
+    brandId
+    categoryId
+    subCategoryId
+    materialId
+    patternId
+    vendorId
+    purchasePrice
+    salePrice
+    primaryImage
+    variants {
+      id
+      variantName
+      price
+      stockQuantity
+      status
+      images {
+        id
+        imageUrl
+        productVariantId {
+          id
+        }
+      }
+      product {
+        id
+      }
+    }
+    categoryName
+    brandName
+    materialName
+    patternName
+  }
+}

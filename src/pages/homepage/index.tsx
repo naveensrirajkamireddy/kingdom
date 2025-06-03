@@ -2,11 +2,16 @@ import { IonCol, IonContent, IonicSlides, IonPage, IonRow } from "@ionic/react";
 import AppHeader from "../../components/app-header";
 import Slides from "../../components/slides";
 import ProductCard from "../../components/product-card";
-import { useGetCategoriesQuery } from "../../graphql/generated";
+import {
+  useGetCategoriesQuery,
+  useProductsListLazyQuery,
+  useProductsListQuery,
+} from "../../graphql/generated";
 import { useEffect, useState } from "react";
 import CategoryCard from "../../components/category-card";
 import Categories from "../../components/categories";
 import Products from "../../components/products";
+import { Container } from "react-bootstrap";
 
 export const sampleProducts = [
   {
@@ -234,27 +239,40 @@ const Home: React.FC = () => {
     },
   });
 
+  const [productsList, setProductsList] = useState<any[]>([]);
+  const { data: productsData, loading: productsLoading } = useProductsListQuery(
+    {
+      variables: {
+        page: 1,
+        limit: 20,
+      },
+    }
+  );
+
   const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     if (data?.getCategories) {
       setCategories(data?.getCategories);
     }
-  }, [data]);
+    if (productsData?.productsList) {
+      setProductsList(productsData?.productsList);
+    }
+  }, [data, productsData]);
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <Slides />
+    <>
+      <Slides />
+      <Container fluid className="mb-3">
         <div className="container-fluid">
           <h1 className="section-title">Categories</h1>
           <Categories list={categories} />
           <h1 className="section-title">New Arrivals</h1>
-          <Products list={sampleProducts} />
+          <Products list={productsList} />
           <h1 className="section-title">Trending Products</h1>
-          <Products list={sampleProducts} />
+          <Products list={productsList} />
         </div>
-      </IonContent>
-    </IonPage>
+      </Container>
+    </>
   );
 };
 

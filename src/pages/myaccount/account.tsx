@@ -19,6 +19,7 @@ import {
 } from "@ionic/react";
 import { useUser } from "../../context/userContext";
 import { Container } from "react-bootstrap";
+import OrdersPage from "../orders";
 
 const Account: React.FC = () => {
   const { user, setUser } = useUser();
@@ -101,7 +102,7 @@ const Account: React.FC = () => {
             </IonSegmentContent>
             <IonSegmentContent id="orders">
               <h5>Orders List</h5>
-              <p>You have no orders yet.</p>
+              <OrdersPage />
             </IonSegmentContent>
             <IonSegmentContent id="address">
               <h5>Address List</h5>

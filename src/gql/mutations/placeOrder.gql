@@ -1,0 +1,15 @@
+mutation PlaceOrder($paymentMethod: String!, $totalAmount: Float!, $addressId: String!, $customerId: String!, $items: [OrderItemInput!]!) {
+  placeOrder(paymentMethod: $paymentMethod, totalAmount: $totalAmount, addressId: $addressId, customerId: $customerId, items: $items) {
+    id
+    customerId
+    addressId
+    totalAmount
+    paymentMethod
+    status
+    items {
+      productId
+      price
+      quantity
+    }
+  }
+}

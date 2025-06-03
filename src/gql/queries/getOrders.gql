@@ -1,0 +1,17 @@
+query GetOrders($customerId: String!) {
+  getOrders(customerId: $customerId) {
+    id
+    customerId
+    addressId
+    totalAmount
+    paymentMethod
+    status
+    items {
+      id
+      productId
+      price
+      quantity
+      productName
+    }
+  }
+}

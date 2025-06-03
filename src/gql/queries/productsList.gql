@@ -1,0 +1,38 @@
+query ProductsList($relatedToId: String, $brandId: Int, $categoryId: Int, $type: String, $limit: Int!, $page: Int!) {
+  productsList(relatedToId: $relatedToId, brandId: $brandId, categoryId: $categoryId, type: $type, limit: $limit, page: $page) {
+    id
+    productName
+    description
+    status
+    brandId
+    categoryId
+    subCategoryId
+    materialId
+    patternId
+    vendorId
+    purchasePrice
+    salePrice
+    primaryImage
+    variants {
+      id
+      variantName
+      price
+      stockQuantity
+      status
+      images {
+        id
+        imageUrl
+        productVariantId {
+          id
+        }
+      }
+      product {
+        id
+      }
+    }
+    brandName
+    categoryName
+    materialName
+    patternName
+  }
+}

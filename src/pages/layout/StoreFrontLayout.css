@@ -2,87 +2,117 @@
     ion-menu {
       display: none;
     }
-  }
-/* Ensure the toolbar/header allows dropdown to show above */
+}
+
 .storefront-header {
     position: relative;
     z-index: 10;
     overflow: visible;
-  }
-  
-  /* Megamenu dropdown customization */
-  .megamenu .dropdown-menu {
-    display: block; /* Required for position tweaking */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.megamenu .dropdown-menu {
+    display: block;
     position: absolute !important;
-    top: 100%; /* Below the button */
+    top: 100%;
     left: 0;
     margin-top: 0px;
-    transform: translateY(10px); /* Slight downward shift */
+    transform: translateY(10px);
     width: 500px;
     padding: 1rem 1.5rem;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    border: none;
     z-index: 20;
-  }
-  
-  /* Columns inside megamenu */
-  .megamenu-column {
+}
+
+.megamenu-column {
     min-width: 200px;
-  }
-  
-  .megamenu-column h6 {
+    padding: 10px;
+}
+
+.megamenu-column h6 {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.5rem;
     color: #333;
-  }
-  
-  /* Megamenu items */
-  .megamenu .dropdown-item {
-    padding: 0.25rem 0;
+    border-bottom: 2px solid #6c5ce7;
+    padding-bottom: 4px;
+}
+
+.megamenu .dropdown-item {
+    padding: 0.5rem 0;
     color: #555;
     font-size: 0.95rem;
-  }
-  
-  .megamenu .dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #000;
-  }
-  
-/* Let scroll container behave normally */
-/* .storefront-content {
-  padding-top: 100px !important; /* 56px is typical toolbar height */
-/* } */ */
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.megamenu .dropdown-item:hover {
+    background-color: #f0f0f0;
+    color: #6c5ce7;
+    border-radius: 4px;
+}
 
 ion-content::part(scroll) {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background: linear-gradient(135deg, #f9f9f9, #e6e6e6);
+    font-family: 'Poppins', sans-serif;
 }
 
 .inner-content {
-  display: flex;
-  flex-direction: column;
-  padding-top: 100px !important;
-  flex: 1;
-  min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px !important;
+    flex: 1;
+    min-height: 100%;
 }
 
 .inner-content .container-fluid {
-  flex: 1;
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 20px;
 }
 
-/* Remove sticky behavior */
 .page-footer {
-  padding: 1rem 0;
-  background-color: #f8f9fa;
-  border-top: 1px solid #ddd;
-  font-size: 0.9rem;
-  margin-top: auto;
-  position: static !important; /* <-- this removes any sticky/fixed effect */
-  z-index: 1 !important;     /* <-- no overlap */
+    padding: 1rem 0;
+    color: white;
+    text-align: center;
+    font-size: 0.95rem;
+    margin-top: auto;
+    border-top: none;
+    position: static !important;
+    z-index: 1 !important;
+}
+
+.page-footer a {
+    color: #f1c40f;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-footer a:hover {
+    text-decoration: underline;
 }
 
 
-  
+@media (max-width: 768px) {
+    .megamenu .dropdown-menu {
+        width: 90%;
+        transform: none;
+        position: static !important;
+        box-shadow: none;
+    }
+    
+    .inner-content .container-fluid {
+        margin: 0 10px;
+    }
+    
+    .storefront-header {
+        text-align: center;
+    }
+}

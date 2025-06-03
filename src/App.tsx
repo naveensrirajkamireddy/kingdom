@@ -53,6 +53,10 @@ import Shop from "./pages/shop";
 import AuthenticationRoute from "./AuthenticatedRoute";
 import Account from "./pages/myaccount/account";
 import CartPage from "./pages/cart";
+import Footer from "./pages/footer";
+import Checkout from "./pages/checkout";
+import OrderDetailPage from "./pages/orders/orderDetail";
+import OffersPage from "./pages/offers";
 
 setupIonicReact();
 
@@ -61,15 +65,17 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonRouterOutlet>
         <StorefrontLayout>
-        <Route path="/" component={Home} exact />
-        <Route path="/home" component={Home} exact />
-        <Route path="/shop" component={Shop} exact />
-        <Route path="/cart" component={CartPage} exact />
+          <Route path="/" component={Home} exact />
+          <Route path="/home" component={Home} exact />
+          <Route path="/shop" component={Shop} exact />
+          <Route path="/cart" component={CartPage} exact />
+          <Route path="/checkout" component={Checkout} exact />
+          <Route path="/offers" component={OffersPage} exact />
+          <Route path="/order/:orderId" component={OrderDetailPage} />
+          {/* Protected ROutes  */}
+          <AuthenticationRoute path="/account" component={Account} exact />
 
-        {/* Protected ROutes  */}
-        <AuthenticationRoute path="/account" component={Account} exact />
-
-        <Route path="/detail/:productId" component={ProductDetail} exact />
+          <Route path="/detail/:productId" component={ProductDetail} exact />
         </StorefrontLayout>
       </IonRouterOutlet>
     </IonReactRouter>

@@ -1,0 +1,13 @@
+mutation AddAddress($country: String!, $postalCode: String!, $state: String!, $city: String!, $addressLine1: String!, $customerId: String!, $addressLine2: String, $isDefault: Boolean!) {
+  addAddress(country: $country, postalCode: $postalCode, state: $state, city: $city, addressLine1: $addressLine1, customerId: $customerId, addressLine2: $addressLine2, isDefault: $isDefault) {
+    id
+    customerId
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    country
+    isDefault
+  }
+}

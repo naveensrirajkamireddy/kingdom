@@ -3,45 +3,65 @@ import "./ProductCard.css";
 import { IonRouterLink } from "@ionic/react";
 
 interface ProductCardProps {
-  id: any;
-  name: string;
-  images: string[];
-  price: number;
-  offerPrice?: number;
-  onAddToCart: (id: number) => void;
+  id: string;
+  productName: string;
+  primaryImage: string;
+  salePrice: number;
+  purchasePrice: number;
+  variants?: {
+    id: string;
+    images: {
+      id: number;
+      imageUrl: string;
+    }[];
+  }[];
+  onAddToCart?: (id: string) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   id,
-  name,
-  images,
-  price,
-  offerPrice,
+  productName,
+  primaryImage,
+  salePrice,
+  purchasePrice,
+  variants,
   onAddToCart,
 }) => {
+  // Determine which image to show (prefer variant images if available)
+  const displayImage =
+    variants && variants.length > 0 && variants[0].images.length > 0
+      ? variants[0].images[0].imageUrl
+      : primaryImage;
+
+  const handleAddToCartClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onAddToCart && onAddToCart(id);
+  };
+  console.log("displayImage", displayImage);
+
   return (
-    <IonRouterLink routerLink={`/detail/${id}`}>
+    <IonRouterLink routerLink={`/detail/${id}`} className="product-card-link">
       <div className="product-card">
         <img
-          src={images[0]}
-          alt={name}
+          src={displayImage || "/no-image.png"}
+          alt={productName}
           className="product-image"
-          onError={(e) =>
-            (e.currentTarget.src =
-              "https://via.placeholder.com/300x400?text=Image+Not+Found")
-          }
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/no-image.png";
+          }}
         />
         <div className="product-overlay">
           <div className="product-info">
-            <h5 className="product-title">{name}</h5>
+            <h5 className="product-title">{productName}</h5>
             <div className="product-price">
-              {offerPrice ? (
+              {salePrice < purchasePrice ? (
                 <>
-                  <span className="offer-price">₹{offerPrice}</span>
-                  <span className="original-price">₹{price}</span>
+                  <span className="offer-price">₹{salePrice}</span>
+                  <span className="original-price">₹{purchasePrice}</span>
                 </>
               ) : (
-                <span className="offer-price">₹{price}</span>
+                <span className="offer-price">₹{purchasePrice}</span>
               )}
             </div>
           </div>

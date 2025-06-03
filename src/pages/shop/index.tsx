@@ -57,7 +57,7 @@ const Shop: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <>
       {isMobile && (
         <>
           <IonButtons slot="end" className="p-3">
@@ -96,78 +96,76 @@ const Shop: React.FC = () => {
         </>
       )}
 
-      <IonContent>
-        <Container fluid className="py-3">
-          {!isMobile ? (
-            <Row className="p-3">
-              <Col md={3}>
-                <Filters />
-              </Col>
-              <Col md={9}>
-                <div className="d-flex justify-content-end mb-3">
-                  <label className="pt-2 pe-3">Sort By:</label>
-                  <select
-                    className="form-select w-auto"
-                    value={sortBy}
-                    onChange={(e) => handleSortChange(e.target.value)}
-                  >
-                    {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <IonRow>
-                  {sampleProducts.map((item) => (
-                    <>
-                      <IonCol
-                        size="3"
-                        sizeLg="3"
-                        sizeMd="3"
-                        sizeXl="3"
-                        sizeSm="6"
-                        sizeXs="6"
-                      >
-                        <ShopProductCard
-                          onAddToCart={function (id: number): void {
-                            throw new Error("Function not implemented.");
-                          }}
-                          {...item}
-                        />
-                      </IonCol>
-                    </>
+      <Container fluid className="py-3">
+        {!isMobile ? (
+          <Row className="p-3">
+            <Col md={3}>
+              <Filters />
+            </Col>
+            <Col md={9}>
+              <div className="d-flex justify-content-end mb-3">
+                <label className="pt-2 pe-3">Sort By:</label>
+                <select
+                  className="form-select w-auto"
+                  value={sortBy}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
                   ))}
-                </IonRow>
-              </Col>
-            </Row>
-          ) : (
-            <>
-              <Products list={sampleProducts} />
-              <IonModal
-                isOpen={showFilters}
-                onDidDismiss={() => setShowFilters(false)}
-              >
-                <IonHeader>
-                  <IonToolbar>
-                    <IonTitle>Filters</IonTitle>
-                    <IonButtons slot="end">
-                      <IonButton onClick={() => setShowFilters(false)}>
-                        Close
-                      </IonButton>
-                    </IonButtons>
-                  </IonToolbar>
-                </IonHeader>
-                <IonContent>
-                  <Filters />
-                </IonContent>
-              </IonModal>
-            </>
-          )}
-        </Container>
-      </IonContent>
-    </IonPage>
+                </select>
+              </div>
+
+              <IonRow>
+                {sampleProducts.map((item) => (
+                  <>
+                    <IonCol
+                      size="3"
+                      sizeLg="3"
+                      sizeMd="3"
+                      sizeXl="3"
+                      sizeSm="6"
+                      sizeXs="6"
+                    >
+                      <ShopProductCard
+                        onAddToCart={function (id: number): void {
+                          throw new Error("Function not implemented.");
+                        }}
+                        {...item}
+                      />
+                    </IonCol>
+                  </>
+                ))}
+              </IonRow>
+            </Col>
+          </Row>
+        ) : (
+          <>
+            <Products list={sampleProducts} />
+            <IonModal
+              isOpen={showFilters}
+              onDidDismiss={() => setShowFilters(false)}
+            >
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Filters</IonTitle>
+                  <IonButtons slot="end">
+                    <IonButton onClick={() => setShowFilters(false)}>
+                      Close
+                    </IonButton>
+                  </IonButtons>
+                </IonToolbar>
+              </IonHeader>
+              <IonContent>
+                <Filters />
+              </IonContent>
+            </IonModal>
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 
