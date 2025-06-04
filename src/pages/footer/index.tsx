@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 
 const Footer: React.FC = () => {
   return (
-    <IonFooter className="footer-wrapper ion-no-border">
+    <IonFooter className="footer-wrapper ion-no-border premium-gradient">
       <Container fluid>
         <div className="footer-container">
           <IonGrid>

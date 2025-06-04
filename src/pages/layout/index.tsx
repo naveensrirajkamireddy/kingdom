@@ -93,10 +93,10 @@ const StorefrontLayout: React.FC<StorefrontLayoutProps> = ({ children }) => {
         {/* Main Page */}
         <IonPage id="main-content">
           <IonHeader>
-            <div className="bg-dark text-white text-center p-2">
+            <div className="bg-dark text-white text-center p-2 premium-gradient">
               <IonLabel>Hello! Kingdom Fashion</IonLabel>
             </div>
-            <IonToolbar className="storefront-header">
+            <IonToolbar className="storefront-header premium-header">
               <Container fluid>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="d-flex align-items-center">

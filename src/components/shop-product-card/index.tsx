@@ -25,7 +25,7 @@ const ShopProductCard: React.FC<ShopProductCardProps> = ({
 }) => {
   return (
     <IonRouterLink routerLink={`/detail/${id}`}>
-      <Card className="h-100" key={id}>
+      <Card className="h-100 premium-card" key={id}>
         <Card.Img src={images[0]} />
         <Card.Body className="pb-0">
           <p>
@@ -49,7 +49,7 @@ const ShopProductCard: React.FC<ShopProductCardProps> = ({
           </p>
         </Card.Body>
         <Card.Footer className="bg-transparent border-0 pt-0 px-2">
-          <IonButton color={"dark"} expand="full" className="bottom">
+          <IonButton color={"dark"} expand="full" className="premium-btn bottom">
             Add to cart
           </IonButton>
         </Card.Footer>
