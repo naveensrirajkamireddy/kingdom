@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <IonRouterLink routerLink={`/detail/${id}`} className="product-card-link">
-      <div className="product-card">
+      <div className="product-card premium-card">
         <img
           src={displayImage || "/no-image.png"}
           alt={productName}

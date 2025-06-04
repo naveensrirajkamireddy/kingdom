@@ -44,6 +44,7 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import "./theme/premium.css";
 import HomePage from "./pages/homepage";
 import StorefrontLayout from "./pages/layout";
 import AppRoutes from "./AppRoutes";
