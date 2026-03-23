@@ -1,186 +1,159 @@
-import React, {
-  ReactNode,
-  useEffect,
-  useState,
-  createContext,
-  useContext,
-} from "react";
+import React from "react";
 import {
-  IonApp,
+  IonPage,
   IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonIcon,
   IonMenu,
   IonList,
   IonItem,
-  IonMenuButton,
-  IonButtons,
-  IonPage,
-  IonIcon,
   IonLabel,
-  IonButton,
+  IonMenuButton,
+  IonMenuToggle,
 } from "@ionic/react";
 import {
-  menuOutline,
+  searchOutline,
+  personOutline,
+  heartOutline,
   cartOutline,
-  personCircleOutline,
-  powerOutline,
 } from "ionicons/icons";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./StoreFrontLayout.css";
-import LoginModal from "../loginModal/loginModal";
-import { logout, useUser } from "../../context/userContext";
-import Footer from "../footer";
+import { useGetCategoriesQuery } from "../../graphql/generated";
 
-// Context to share showLogin control
-interface LayoutContextType {
-  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
-const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
-export const useLayout = () => {
-  const context = useContext(LayoutContext);
-  if (!context) throw new Error("useLayout must be used within LayoutProvider");
-  return context;
-};
-
-interface StorefrontLayoutProps {
-  children: ReactNode;
+interface LayoutProps {
+  children: React.ReactNode;
 }
 
-const StorefrontLayout: React.FC<StorefrontLayoutProps> = ({ children }) => {
-  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 992);
-  const { user, setUser } = useUser();
-  const navigate = useHistory();
+const StorefrontLayout: React.FC<LayoutProps> = ({ children }) => {
+  const location = useLocation();
 
-  const [showLogin, setShowLogin] = useState(false);
-
-  const handleLogout = () => {
-    logout();
-    navigate.push("/home");
-  };
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 992);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const { data } = useGetCategoriesQuery({
+    variables: { parentMenu: "" },
+  });
 
   return (
-    <IonApp>
-      <LayoutContext.Provider value={{ setShowLogin }}>
-        {/* Mobile Menu */}
-        {isMobile && (
-          <IonMenu side="start" menuId="main-menu" contentId="main-content">
-            <IonContent>
+    <>
+      {/* --- 1. MOBILE SIDE MENU DRAWER --- */}
+      <IonMenu
+        contentId="main-content"
+        className="store-mobile-drawer"
+        type="overlay"
+      >
+        <IonHeader className="ion-no-border">
+          <IonToolbar className="drawer-top-section">
+            <Link to="/" className="store-logo m-0">
               <img
-                src="/kingdom-logo.png"
-                className="w-75 p-4"
-                alt="Kingdom Fashion"
+                src="/logo-dark.png"
+                alt="Kingdom Logo"
+                className="logo-image mt-3"
               />
-              <IonList>
-                <IonItem routerLink="/">Home</IonItem>
-                <IonItem routerLink="/shop">Shop</IonItem>
-                <IonItem routerLink="/offers">Offers</IonItem>
-                <IonItem routerLink="/about">About Us</IonItem>
-                <IonItem routerLink="/contact">Contact</IonItem>
-              </IonList>
-            </IonContent>
-          </IonMenu>
-        )}
+            </Link>
+          </IonToolbar>
+        </IonHeader>
 
-        {/* Main Page */}
-        <IonPage id="main-content">
-          <IonHeader>
-            <div className="bg-dark text-white text-center p-2">
-              <IonLabel>Hello! Kingdom Fashion</IonLabel>
+        <IonContent className="drawer-content">
+          <IonList lines="none" className="mt-3">
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                routerLink="/"
+                className={`premium-drawer-item ${location.pathname === "/" ? "active-drawer-item" : ""}`}
+              >
+                <IonLabel>Home</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                routerLink="/shop"
+                className={`premium-drawer-item ${location.pathname.includes("/shop") ? "active-drawer-item" : ""}`}
+              >
+                <IonLabel>Shop</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+
+            {data?.getCategories?.map((category) => (
+              <IonMenuToggle autoHide={false} key={category.id}>
+                <IonItem
+                  routerLink={`/shop/${category.id}`}
+                  className={`premium-drawer-item ${location.pathname.includes(`/shop/${category.id}`) ? "active-drawer-item" : ""}`}
+                >
+                  <IonLabel>{category.categoryName}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            ))}
+          </IonList>
+        </IonContent>
+
+        <div className="drawer-footer-premium">
+          <button className="nav-login-btn w-100">Login / Register</button>
+        </div>
+      </IonMenu>
+
+      {/* --- 2. MAIN PAGE CONTENT --- */}
+      {/* The id here MUST match the contentId in IonMenu */}
+      <IonPage id="main-content">
+        {/* Main Navigation Header */}
+        <IonHeader className="ion-no-border main-header">
+          <IonToolbar className="main-nav-toolbar px-2 px-lg-4">
+            {/* Mobile Menu Toggle (Replaced static button with IonMenuButton) */}
+            <IonButtons slot="start" className="d-lg-none">
+              <IonMenuButton className="action-item" />
+            </IonButtons>
+
+            {/* Logo */}
+            <div className="logo-container" slot="start">
+              <Link to="/" className="store-logo">
+                <img
+                  src="/logo-dark.png"
+                  alt="Kingdom Logo"
+                  className="logo-image"
+                />
+              </Link>
             </div>
-            <IonToolbar className="storefront-header">
-              <Container fluid>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center">
-                    {isMobile && (
-                      <IonButtons slot="start">
-                        <IonMenuButton autoHide={false}>
-                          <IonIcon icon={menuOutline} size="large" />
-                        </IonMenuButton>
-                      </IonButtons>
-                    )}
-                    <IonTitle className="ms-2 mb-0 h4">
-                      The<b>Kingdom</b>Fashion
-                    </IonTitle>
-                  </div>
-                  {!isMobile && (
-                    <Navbar expand="lg" className="justify-content-center">
-                      <Nav className="gap-3">
-                        <Nav.Link as={Link} to="/">
-                          Home
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/shop">
-                          Shop
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/offers">
-                          Offers
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/about">
-                          About Us
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/contact">
-                          Contact
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/cart">
-                          Cart
-                        </Nav.Link>
-                        {user ? (
-                          <>
-                            <IonButton
-                              fill="clear"
-                              onClick={() => navigate.push("/account")}
-                              color={"dark"}
-                            >
-                              <IonIcon
-                                icon={personCircleOutline}
-                                size="small"
-                              />
-                              &nbsp;{user.customerName}
-                            </IonButton>
-                            <IonButton
-                              fill="clear"
-                              onClick={handleLogout}
-                              color={"dark"}
-                            >
-                              <IonIcon icon={powerOutline} />
-                            </IonButton>
-                          </>
-                        ) : (
-                          <IonButton
-                            fill="clear"
-                            onClick={() => setShowLogin(true)}
-                            color={"dark"}
-                          >
-                            <IonIcon icon={personCircleOutline} size="small" />
-                            &nbsp;Signin/Signup
-                          </IonButton>
-                        )}
-                      </Nav>
-                    </Navbar>
-                  )}
-                </div>
-              </Container>
-            </IonToolbar>
-          </IonHeader>
 
-          <IonContent fullscreen className="storefront-content">
-            <div className="storefront-content">{children}</div>
-            <Footer />
-          </IonContent>
+            {/* Desktop Center Links */}
+            <div className="desktop-links-container d-none d-lg-flex w-100">
+              <Link to="/" className="nav-link-custom active">
+                Home <i className="bi bi-chevron-down"></i>
+              </Link>
+              <Link to="/shop" className="nav-link-custom">
+                Shop <i className="bi bi-chevron-down"></i>
+              </Link>
+              {data?.getCategories?.map((category) => (
+                <Link
+                  key={category.id}
+                  to={`/shop/${category.id}`}
+                  className="nav-link-custom"
+                >
+                  {category.categoryName} <i className="bi bi-chevron-down"></i>
+                </Link>
+              ))}
+            </div>
 
-          {/* Login Modal */}
-          <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
-        </IonPage>
-      </LayoutContext.Provider>
-    </IonApp>
+            {/* Action Icons (Right) */}
+            <IonButtons slot="end" className="action-icons">
+              <IonButton
+                className="action-item d-none d-sm-block"
+                href="/login"
+              >
+                <IonIcon icon={personOutline} />
+              </IonButton>
+              <IonButton className="action-item position-relative">
+                <IonIcon icon={cartOutline} />
+                <span className="badge-dot">0</span>
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+
+        {/* Dynamic Page Content */}
+        <IonContent>{children}</IonContent>
+      </IonPage>
+    </>
   );
 };
 

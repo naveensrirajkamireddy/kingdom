@@ -1,0 +1,21 @@
+/* =========================================
+   5-COLUMN GRID LOGIC FOR DESKTOP
+   ========================================= */
+
+/* Ionic's grid system is based on 12 columns, which doesn't divide nicely by 5. 
+  This overrides the desktop breakpoint (992px and up) to force a 5-column layout 
+  (20% width per column) exactly like the PressMart mockup. 
+*/
+
+@media (min-width: 992px) {
+  .pressmart-grid .grid-col-5 {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+
+/* Optional: Add a little vertical breathing room between rows of products */
+.pressmart-grid {
+  row-gap: 15px;
+  margin-top: 10px;
+}

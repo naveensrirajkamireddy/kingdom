@@ -48,7 +48,7 @@ const OffersPage: React.FC = () => {
   return (
     <>
       <Container fluid className="py-3">
-        <h3>Exclusive Offers</h3>
+        <h3 className="section-title">Exclusive Offers</h3>
 
         <IonGrid>
           <IonRow>

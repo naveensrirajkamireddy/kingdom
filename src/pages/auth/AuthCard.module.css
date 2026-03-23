@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap");
+
+.pageWrapper {
+  background: #fcfcfc; /* Clean premium off-white */
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.authCard {
+  background: #ffffff;
+  padding: 48px 40px;
+  border-radius: 16px;
+  /* Layered Shadow for "Elevation" */
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.02),
+    0 20px 50px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid #f0f0f0;
+  transition: transform 0.4s ease;
+}
+
+.logoArea {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logoImage {
+  height: 50px;
+  width: auto;
+  filter: grayscale(1); /* Keeps logo elegant and neutral */
+}
+
+.title {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+/* Premium Ionic Input Styling */
+.inputField {
+  --background: #fff;
+  --color: #111;
+  --placeholder-color: #999;
+  --padding-start: 16px;
+  --border-radius: 8px;
+  margin-bottom: 20px;
+  font-family: "Inter", sans-serif;
+}
+
+/* Target the internal outline of Ionic Input */
+.inputField::part(container) {
+  border: 1.5px solid #eee;
+  transition: border-color 0.3s ease;
+}
+
+.inputField.item-has-focus::part(container) {
+  border-color: #a01e20; /* Kingdom Maroon on Focus */
+}
+
+.primaryButton {
+  --background: #111;
+  --background-activated: #a01e20;
+  --background-hover: #1a1a1a;
+  --color: #fff;
+  --border-radius: 8px;
+  height: 56px;
+  margin-top: 15px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  --box-shadow: none;
+}
+
+.linkText {
+  text-align: center;
+  margin-top: 30px;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: #777;
+}
+
+.linkText a {
+  color: #111;
+  text-decoration: none;
+  font-weight: 700;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 2px;
+  transition: all 0.3s ease;
+}
+
+.linkText a:hover {
+  color: #a01e20;
+  border-color: #a01e20;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 25px 0;
+  color: #bbb;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.divider span {
+  padding: 0 15px;
+}

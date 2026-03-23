@@ -1,118 +1,234 @@
-@media (min-width: 768px) {
-    ion-menu {
-      display: none;
-    }
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap");
+
+:root {
+  --p-blue: #0066cc; /* Brand Blue from Mockup */
+  --p-black: #222222;
+  --p-white: #ffffff;
+  --p-border: #eeeeee;
+  --p-text-muted: #777777;
+  --p-transition: all 0.3s ease;
+  --p-glass: rgba(255, 255, 255, 0.95);
 }
 
-.storefront-header {
-    position: relative;
-    z-index: 10;
-    overflow: visible;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+/* --- Top Support / Localization Bar --- */
+.top-bar {
+  background-color: var(--p-blue);
+  color: var(--p-white);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
 }
 
-.megamenu .dropdown-menu {
-    display: block;
-    position: absolute !important;
-    top: 100%;
-    left: 0;
-    margin-top: 0px;
-    transform: translateY(10px);
-    width: 500px;
-    padding: 1rem 1.5rem;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-    border: none;
-    z-index: 20;
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
 }
 
-.megamenu-column {
-    min-width: 200px;
-    padding: 10px;
+.top-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.megamenu-column h6 {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #333;
-    border-bottom: 2px solid #6c5ce7;
-    padding-bottom: 4px;
+.dropdown-trigger {
+  cursor: pointer;
 }
 
-.megamenu .dropdown-item {
-    padding: 0.5rem 0;
-    color: #555;
-    font-size: 0.95rem;
-    transition: color 0.3s, background-color 0.3s;
+.dropdown-trigger i {
+  font-size: 10px;
 }
 
-.megamenu .dropdown-item:hover {
-    background-color: #f0f0f0;
-    color: #6c5ce7;
-    border-radius: 4px;
+/* --- Main Header Essentials --- */
+.main-header {
+  border-bottom: 1px solid var(--p-border);
+  background: var(--p-white);
 }
 
-ion-content::part(scroll) {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    background: linear-gradient(135deg, #f9f9f9, #e6e6e6);
-    font-family: 'Poppins', sans-serif;
+.main-nav-toolbar {
+  --background: var(--p-white);
+  --min-height: 80px;
 }
 
-.inner-content {
-    display: flex;
-    flex-direction: column;
-    padding-top: 100px !important;
-    flex: 1;
-    min-height: 100%;
+.store-logo {
+  font-family: "Poppins", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--p-black);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  display: inline-block;
 }
 
-.inner-content .container-fluid {
-    flex: 1;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    padding: 20px;
+/* --- Navigation Links (Center) --- */
+.desktop-links-container {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  margin-left: 20px;
 }
 
-.page-footer {
-    padding: 1rem 0;
-    color: white;
-    text-align: center;
-    font-size: 0.95rem;
-    margin-top: auto;
-    border-top: none;
-    position: static !important;
-    z-index: 1 !important;
+.nav-link-custom {
+  text-decoration: none;
+  color: var(--p-black) !important;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: var(--p-transition);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.page-footer a {
-    color: #f1c40f;
-    text-decoration: none;
-    font-weight: 600;
+.nav-link-custom i {
+  font-size: 10px;
+  margin-top: 2px;
+  color: var(--p-text-muted);
 }
 
-.page-footer a:hover {
-    text-decoration: underline;
+.nav-link-custom.active,
+.nav-link-custom:hover {
+  color: var(--p-blue) !important;
 }
 
+/* --- Action Icons (Right) --- */
+.action-icons {
+  gap: 5px;
+}
 
-@media (max-width: 768px) {
-    .megamenu .dropdown-menu {
-        width: 90%;
-        transform: none;
-        position: static !important;
-        box-shadow: none;
-    }
-    
-    .inner-content .container-fluid {
-        margin: 0 10px;
-    }
-    
-    .storefront-header {
-        text-align: center;
-    }
+.action-item {
+  --color: var(--p-black);
+  --padding-start: 8px;
+  --padding-end: 8px;
+  font-size: 20px;
+}
+
+.action-item:hover {
+  --color: var(--p-blue);
+}
+
+.badge-dot {
+  position: absolute;
+  top: 6px;
+  right: 2px;
+  background: var(--p-blue);
+  color: white;
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+/* =========================================
+   MOBILE SIDE APP DRAWER 
+   ========================================= */
+
+.store-mobile-drawer::part(container) {
+  width: 85% !important;
+  max-width: 350px;
+  box-shadow: 25px 0 50px rgba(0, 0, 0, 0.15);
+}
+
+.drawer-content {
+  --background: var(--p-white);
+}
+
+.drawer-top-section {
+  --background: var(--p-white);
+  padding: 30px 20px 10px;
+  border-bottom: 1px solid var(--p-border);
+}
+
+.premium-drawer-item {
+  --background: transparent;
+  margin: 8px 15px;
+  border-radius: 8px;
+  --min-height: 55px;
+  cursor: pointer;
+}
+
+.premium-drawer-item IonLabel {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.1rem !important;
+  font-weight: 500;
+  color: var(--p-black);
+}
+
+.active-drawer-item {
+  --background: rgba(0, 102, 204, 0.08); /* Light blue background for active */
+}
+
+.active-drawer-item IonLabel {
+  color: var(--p-blue);
+  font-weight: 600;
+}
+
+.drawer-footer-premium {
+  padding: 25px;
+  background: #fafafa;
+  border-top: 1px solid var(--p-border);
+}
+
+.nav-login-btn {
+  border: 1.5px solid var(--p-black);
+  background: transparent;
+  color: var(--p-black);
+  padding: 12px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+  transition: var(--p-transition);
+  border-radius: 4px;
+}
+
+.nav-login-btn:hover {
+  background: var(--p-black);
+  color: #fff;
+}
+
+/* --- Mobile Specific Overrides --- */
+@media (max-width: 991px) {
+  .top-bar {
+    padding: 0 15px;
+    justify-content: center;
+  }
+}
+
+/* --- Responsive Logo Image --- */
+.logo-image {
+  height: 40px; /* Standard desktop height */
+  width: auto;
+  max-width: 200px; /* Safety constraint so it doesn't push other icons away */
+  object-fit: contain; /* Prevents the image from stretching or squishing */
+  display: block;
+  transition: var(--p-transition);
+}
+
+/* Tablet / Smaller Desktop Adjustments */
+@media (max-width: 991px) {
+  .logo-image {
+    height: 35px;
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 576px) {
+  .logo-image {
+    height: 30px;
+    max-width: 150px;
+  }
 }

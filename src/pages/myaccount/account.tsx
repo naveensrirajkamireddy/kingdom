@@ -1,182 +1,143 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButton,
-  IonModal,
-  IonInput,
+  IonRow,
+  IonCol,
+  IonList,
   IonItem,
   IonLabel,
-  IonList,
+  IonIcon,
   IonText,
-  IonSegment,
-  IonSegmentButton,
-  IonSegmentView,
-  IonSegmentContent,
+  IonButton,
 } from "@ionic/react";
-import { useUser } from "../../context/userContext";
+import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
+import {
+  cubeOutline,
+  locationOutline,
+  personOutline,
+  heartOutline,
+  logOutOutline,
+  chevronForwardOutline,
+} from "ionicons/icons";
 import { Container } from "react-bootstrap";
-import OrdersPage from "../orders";
+import StorefrontLayout from "../layout";
+import { useUser } from "../../context/userContext";
 
-const Account: React.FC = () => {
-  const { user, setUser } = useUser();
+// Import your sub-pages
+import AddressPage from "./address";
+import ProfilePage from "./profile";
+import OrdersPage from "./orders"; // Make sure to create/import this
+import "./Account.css";
 
-  const [showEditModal, setShowEditModal] = useState(false);
+const AccountLayout: React.FC = () => {
+  const { path, url } = useRouteMatch();
+  const { pathname } = useLocation();
+  const { user, logout } = useUser();
 
-  // Local state for editing user details
-  const [editData, setEditData] = useState({
-    customerName: user?.customerName || "",
-    email: user?.email || "",
-    mobile: user?.mobile || "",
-    address: user?.address || "",
-  });
-
-  const handleSave = () => {
-    // TODO: Add validation or API call if needed
-
-    setUser((prev) =>
-      prev
-        ? {
-            ...prev,
-            customerName: editData.customerName,
-            email: editData.email,
-            mobile: editData.mobile,
-            address: editData.address,
-          }
-        : null
-    );
-    setShowEditModal(false);
-  };
+  const menuItems = [
+    { label: "My Orders", path: `${url}/orders`, icon: cubeOutline },
+    { label: "Saved Addresses", path: `${url}/address`, icon: locationOutline },
+    { label: "Profile Settings", path: `${url}/profile`, icon: personOutline },
+  ];
 
   return (
-    <IonPage>
-      <IonContent className="ion-padding">
-        <Container fluid>
-          <IonSegment>
-            <IonSegmentButton value="details" content-id="details">
-              <IonLabel>Details</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="orders" content-id="orders">
-              <IonLabel>Orders</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="address" content-id="address">
-              <IonLabel>Address</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-          <IonSegmentView>
-            <IonSegmentContent id="details">
-              {/* User Details Section */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <h5>Details</h5>
-                <IonButton onClick={() => setShowEditModal(true)}>
-                  Edit
-                </IonButton>
+    <StorefrontLayout>
+      <div className="account-page-bg">
+        <Container>
+          {/* Profile Header */}
+          <div className="account-header-card">
+            <div className="profile-info-block">
+              <div className="profile-avatar">
+                {user?.customerName?.charAt(0) || "U"}
               </div>
-              <IonList>
-                <IonItem>
-                  <IonLabel>Name:</IonLabel>
-                  <IonText>{user?.customerName || "-"}</IonText>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>Email:</IonLabel>
-                  <IonText>{user?.email || "-"}</IonText>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>Mobile:</IonLabel>
-                  <IonText>{user?.mobile || "-"}</IonText>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>Address:</IonLabel>
-                  <IonText>{user?.address || "-"}</IonText>
-                </IonItem>
-              </IonList>
-            </IonSegmentContent>
-            <IonSegmentContent id="orders">
-              <h5>Orders List</h5>
-              <OrdersPage />
-            </IonSegmentContent>
-            <IonSegmentContent id="address">
-              <h5>Address List</h5>
-              <p>You have no address added yet.</p>
-            </IonSegmentContent>
-          </IonSegmentView>
+              <div className="profile-text">
+                <IonText color="dark">
+                  <h2>Hello, {user?.customerName}!</h2>
+                </IonText>
+                <p>{user?.email || "Welcome to Kingdom Fashion"}</p>
+              </div>
+            </div>
+
+            <div className="quick-stats-row">
+              <div className="stat-box">
+                <span className="stat-value">12</span>
+                <span className="stat-label">Orders</span>
+              </div>
+              <div className="stat-box">
+                <span className="stat-value">04</span>
+                <span className="stat-label">Wishlist</span>
+              </div>
+            </div>
+          </div>
+
+          <IonRow className="ion-margin-top">
+            {/* Sidebar Navigation */}
+            <IonCol size="12" sizeLg="3">
+              <div className="account-nav-card">
+                <IonList lines="none" className="account-nav-list">
+                  {menuItems.map((item) => (
+                    <IonItem
+                      key={item.label}
+                      routerLink={item.path}
+                      /* Use startsWith to keep parent highlighted for sub-routes */
+                      className={`account-nav-item ${
+                        pathname.startsWith(item.path) ? "is-active" : ""
+                      }`}
+                      detail={false}
+                    >
+                      <IonIcon icon={item.icon} slot="start" />
+                      <IonLabel>{item.label}</IonLabel>
+                      <IonIcon
+                        icon={chevronForwardOutline}
+                        slot="end"
+                        className="arrow"
+                      />
+                    </IonItem>
+                  ))}
+
+                  <div className="nav-divider"></div>
+
+                  <IonItem
+                    button
+                    onClick={logout}
+                    className="account-nav-item logout-item"
+                  >
+                    <IonIcon icon={logOutOutline} slot="start" />
+                    <IonLabel>Sign Out</IonLabel>
+                  </IonItem>
+                </IonList>
+              </div>
+            </IonCol>
+
+            {/* Nested Content Area */}
+            <IonCol size="12" sizeLg="9">
+              <div className="account-main-content">
+                <Switch>
+                  {/* Order of Routes matters: place specific ones first */}
+                  <Route path={`${path}/orders`} component={OrdersPage} />
+                  <Route path={`${path}/address`} component={AddressPage} />
+                  <Route path={`${path}/profile`} component={ProfilePage} />
+
+                  {/* Default Account Dashboard */}
+                  <Route exact path={path}>
+                    <div className="welcome-placeholder">
+                      <IonIcon icon={personOutline} />
+                      <h3>Account Dashboard</h3>
+                      <p>
+                        Manage your profile, orders, and addresses from here.
+                      </p>
+                      <IonButton fill="outline" color="dark" routerLink="/shop">
+                        Continue Shopping
+                      </IonButton>
+                    </div>
+                  </Route>
+                </Switch>
+              </div>
+            </IonCol>
+          </IonRow>
         </Container>
-
-        {/* Edit Modal */}
-        <IonModal
-          isOpen={showEditModal}
-          onDidDismiss={() => setShowEditModal(false)}
-        >
-          <IonContent className="ion-padding">
-            <h2>Edit Details</h2>
-            <IonItem>
-              <IonLabel position="stacked">Name</IonLabel>
-              <IonInput
-                value={editData.customerName}
-                onIonChange={(e) =>
-                  setEditData({ ...editData, customerName: e.detail.value! })
-                }
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Email</IonLabel>
-              <IonInput
-                type="email"
-                value={editData.email}
-                onIonChange={(e) =>
-                  setEditData({ ...editData, email: e.detail.value! })
-                }
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Mobile</IonLabel>
-              <IonInput
-                type="tel"
-                value={editData.mobile}
-                onIonChange={(e) =>
-                  setEditData({ ...editData, mobile: e.detail.value! })
-                }
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Address</IonLabel>
-              <IonInput
-                value={editData.address}
-                onIonChange={(e) =>
-                  setEditData({ ...editData, address: e.detail.value! })
-                }
-              />
-            </IonItem>
-
-            <IonButton
-              expand="block"
-              onClick={handleSave}
-              className="ion-margin-top"
-            >
-              Save
-            </IonButton>
-            <IonButton
-              expand="block"
-              fill="clear"
-              color="medium"
-              onClick={() => setShowEditModal(false)}
-            >
-              Cancel
-            </IonButton>
-          </IonContent>
-        </IonModal>
-      </IonContent>
-    </IonPage>
+      </div>
+    </StorefrontLayout>
   );
 };
 
-export default Account;
+export default AccountLayout;

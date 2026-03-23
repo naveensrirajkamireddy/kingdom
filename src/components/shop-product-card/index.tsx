@@ -1,6 +1,8 @@
-import { IonButton, IonIcon, IonRouterLink } from "@ionic/react";
-import { star } from "ionicons/icons";
+import { IonButton, IonIcon, IonBadge, IonText } from "@ionic/react";
+import { star, cartOutline, heartOutline } from "ionicons/icons";
 import { Card } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import "./ShopProductCard.css";
 
 interface ShopProductCardProps {
   id: string;
@@ -9,7 +11,7 @@ interface ShopProductCardProps {
   price: number;
   offerPrice?: number;
   brandName: string;
-  onAddToCart: (id: number) => void;
+  onAddToCart: (id: string) => void;
   rating: any;
 }
 
@@ -23,38 +25,81 @@ const ShopProductCard: React.FC<ShopProductCardProps> = ({
   rating,
   onAddToCart,
 }) => {
+  const history = useHistory();
+
+  // Calculate Discount Percentage
+  const discount = offerPrice
+    ? Math.round(((offerPrice - price) / offerPrice) * 100)
+    : 0;
+
+  const goToDetail = () => history.push(`/detail/${id}`);
+
   return (
-    <IonRouterLink routerLink={`/detail/${id}`}>
-      <Card className="h-100" key={id}>
-        <Card.Img src={images[0]} />
-        <Card.Body className="pb-0">
-          <p>
-            <small className="bg-warning p-1 rounded-2">{brandName}</small>
-          </p>
-          <Card.Subtitle>{name}</Card.Subtitle>
-          <p className="mt-2 text-danger">
-            ₹{price.toFixed(2)}
-            {offerPrice && (
-              <small
-                className="text-muted ms-2"
-                style={{ textDecoration: "line-through" }}
-              >
-                ₹{offerPrice.toFixed(2)}
-              </small>
-            )}
-            <small className="bg-success text-white float-end p-1 rounded-2">
-              <IonIcon ios={star} md={star} />
-              {parseFloat(rating).toFixed(1)}
-            </small>
-          </p>
-        </Card.Body>
-        <Card.Footer className="bg-transparent border-0 pt-0 px-2">
-          <IonButton color={"dark"} expand="full" className="bottom">
-            Add to cart
+    <Card className="product-card-premium border-0" key={id}>
+      <div className="image-container">
+        {discount > 0 && (
+          <IonBadge className="discount-tag">-{discount}%</IonBadge>
+        )}
+        <div className="wishlist-btn">
+          <IonIcon icon={heartOutline} />
+        </div>
+        <Card.Img
+          variant="top"
+          src={images[0]}
+          onClick={goToDetail}
+          className="product-img-zoom"
+        />
+        <div className="hover-actions ion-hide-sm-down">
+          <IonButton fill="solid" color="light" onClick={() => onAddToCart(id)}>
+            <IonIcon icon={cartOutline} slot="start" />
+            Quick Add
           </IonButton>
-        </Card.Footer>
-      </Card>
-    </IonRouterLink>
+        </div>
+      </div>
+
+      <Card.Body
+        className="px-2 pt-3 pb-0"
+        onClick={goToDetail}
+        style={{ cursor: "pointer" }}
+      >
+        <div className="d-flex justify-content-between align-items-center mb-1">
+          <span className="brand-label text-uppercase">{brandName}</span>
+          <div className="rating-pill">
+            <IonIcon icon={star} />
+            <span>{parseFloat(rating).toFixed(1)}</span>
+          </div>
+        </div>
+
+        <Card.Title className="product-name text-truncate">{name}</Card.Title>
+
+        <div className="price-section mt-2">
+          <span className="current-price">
+            ₹{price.toLocaleString("en-IN")}
+          </span>
+          {offerPrice && offerPrice > price && (
+            <span className="original-price ms-2">
+              ₹{offerPrice.toLocaleString("en-IN")}
+            </span>
+          )}
+        </div>
+      </Card.Body>
+
+      <Card.Footer className="bg-transparent border-0 p-2 ion-hide-md-up">
+        {/* Only visible on mobile for quick access */}
+        <IonButton
+          mode="ios"
+          color="dark"
+          expand="block"
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart(id);
+          }}
+        >
+          Add to Cart
+        </IonButton>
+      </Card.Footer>
+    </Card>
   );
 };
 

@@ -1,11 +1,30 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
 
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-@import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
 
-*, ion-label, ion-button {
-    font-family: 'Jost',sans-serif !important;
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+/* 1. Apply to the root and all Ionic Typography variables */
+:root {
+  --ion-font-family: "Google Sans", sans-serif;
+}
+
+/* 2. Force the font on all elements, including Ionic components */
+*,
+ion-label,
+ion-item,
+ion-list,
+ion-menu {
+  font-family: "Google Sans", sans-serif !important;
+}
+
+/* 3. Specifically target the internal parts of Ionic components */
+ion-item,
+ion-label {
+  --font-family: "Google Sans", sans-serif;
 }
 
 :root {
@@ -14,7 +33,10 @@ http://ionicframework.com/docs/theming/ */
   --accent-color: #fd79a8;
   --background-color: #f1f2f6;
   --text-color: #2d3436;
-  --font-family: 'Poppins', sans-serif;
+  --font-family: "Poppins", sans-serif;
+
+  --app-gradient: linear-gradient(120deg, #000000, #a01e20);
+  --black-gradient: linear-gradient(to right, #000000, #434343);
 
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --border-radius: 12px;
@@ -23,30 +45,49 @@ http://ionicframework.com/docs/theming/ */
 
 body {
   font-family: var(--font-family);
-  /* background-color: var(--primary-color); */
   color: var(--text-color);
 }
 
-ion-content{
-  background-color: #fff !important
+a,
+.nav-link {
+  color: #131313;
+  font-weight: 500 !important;
+  text-decoration: none;
+}
+
+.topbar {
+  background: linear-gradient(to right, #000000, #434343);
+}
+
+ion-content {
+  --background: #fff !important;
 }
 
 .swal2-container {
-    height: 100vh;
+  height: 100vh;
 }
 
 .button-primary {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   color: #fff;
   padding: 10px 20px;
   border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
-  transition: background var(--transition-speed), transform var(--transition-speed);
+  transition: background var(--transition-speed),
+    transform var(--transition-speed);
 }
 
 .button-primary:hover {
-  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color),
+    var(--primary-color)
+  );
   transform: scale(1.05);
 }
 
@@ -78,23 +119,16 @@ ion-content{
 }
 
 .navbar {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #fff;
 }
 
 .navbar a {
-  color: #fff;
   text-decoration: none;
   margin: 0 10px;
   font-weight: bold;
-}
-
-.navbar a:hover {
-  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
@@ -108,79 +142,26 @@ ion-content{
   }
 }
 
-
 ion-button {
   text-transform: capitalize;
 }
-  .container-fluid {
-    max-width: 1350px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .section-title {
-    text-align: center;
-    position: relative;
-    font-size: 2rem;
-    margin: 3rem 0;
-    font-weight: 700;
-    color: #222;
-    /* letter-spacing: 1px; */
-    /* text-transform: uppercase; */
-  }
-  
-  .section-title::before,
-  .section-title::after {
-    content: "";
-    position: absolute;
-    top: 120%;
-    height: 1.5px;
-    width: 90px;
-  }
-  
-  .section-title::before {
-    left: calc(50% - 90px);
-    background: linear-gradient(to right, transparent, #a01);
-  }
-  
-  .section-title::after {
-    right: calc(50% - 90px);
-    background: linear-gradient(to left, transparent, #a01);
-  }
-  
-  /* Optional: animation */
-  .section-title {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeInUp 0.6s ease forwards;
-  }
-  
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Responsive adjustment */
-  @media (max-width: 576px) {
-    .section-title::before,
-    .section-title::after {
-      width: 50px;
-    }
-  
-    .section-title::before {
-      left: calc(50% - 60px);
-    }
-  
-    .section-title::after {
-      right: calc(50% - 60px);
-    }
-  }
+.container-fluid {
+  max-width: 1350px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  ion-accordion::part(indicator) {
-    display: none !important;
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
+}
+
+ion-accordion::part(indicator) {
+  display: none !important;
+}
+
 /* Chrome, Safari, Edge, Opera */
 .no-spinner input::-webkit-outer-spin-button,
 .no-spinner input::-webkit-inner-spin-button {
@@ -189,6 +170,28 @@ ion-button {
 }
 
 /* Firefox */
-.no-spinner input[type=number] {
+.no-spinner input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.appSection {
+  padding: 60px 15%;
+}
+
+@media (max-width: 1200px) {
+  .appSection {
+    padding: 50px 6%;
+  }
+}
+
+@media (max-width: 768px) {
+  .appSection {
+    padding: 40px 4%;
+  }
+}
+
+@media (max-width: 480px) {
+  .appSection {
+    padding: 30px 2%;
+  }
 }

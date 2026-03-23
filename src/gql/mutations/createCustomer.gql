@@ -1,0 +1,6 @@
+mutation CreateCustomer($input: CustomerInput!) {
+  createCustomer(input: $input) {
+    success
+    message
+  }
+}

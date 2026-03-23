@@ -1,3 +1,11 @@
+import { Env } from "pg-sdk-node";
+
+// Test Credentials
+export const clientId = "TEST-M23GOSZFCPQPR_25063";
+export const clientSecret = "ZGE1YTcxZGMtOGU3OC00MzM5LTk3MjktMzE1NTYyNGNkZDA0";
+export const clientVersion = 1; //insert your client version here
+export const phonePeEnv = Env.SANDBOX; //change to Env.PRODUCTION when you go live
+
 export enum SizesEnum {
   S = "S",
   M = "M",

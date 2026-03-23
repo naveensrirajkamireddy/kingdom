@@ -1,7 +1,22 @@
-query ProductsList($relatedToId: String, $brandId: Int, $categoryId: Int, $type: String, $limit: Int!, $page: Int!) {
-  productsList(relatedToId: $relatedToId, brandId: $brandId, categoryId: $categoryId, type: $type, limit: $limit, page: $page) {
+query ProductsList(
+  $relatedToId: String
+  $brandId: Int
+  $categoryId: Int
+  $type: String
+  $limit: Int!
+  $page: Int!
+) {
+  productsList(
+    relatedToId: $relatedToId
+    brandId: $brandId
+    categoryId: $categoryId
+    type: $type
+    limit: $limit
+    page: $page
+  ) {
     id
     productName
+    skuCode
     description
     status
     brandId
@@ -13,19 +28,23 @@ query ProductsList($relatedToId: String, $brandId: Int, $categoryId: Int, $type:
     purchasePrice
     salePrice
     primaryImage
+    images {
+      id
+      imageUrl
+      product {
+        id
+      }
+    }
     variants {
       id
       variantName
+      color
+      size
       price
+      discType
+      discValue
       stockQuantity
       status
-      images {
-        id
-        imageUrl
-        productVariantId {
-          id
-        }
-      }
       product {
         id
       }
@@ -34,5 +53,7 @@ query ProductsList($relatedToId: String, $brandId: Int, $categoryId: Int, $type:
     categoryName
     materialName
     patternName
+    newArrival
+    featured
   }
 }

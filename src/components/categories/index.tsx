@@ -1,5 +1,6 @@
 import { IonRow, IonCol } from "@ionic/react";
 import CategoryCard from "../category-card";
+import "./Categories.css";
 
 interface CategoriesProps {
   list: any[];
@@ -7,17 +8,16 @@ interface CategoriesProps {
 
 const Categories: React.FC<CategoriesProps> = ({ list }) => {
   return (
-    <IonRow className="justify-content-center">
-      {list.map((item, index) => (
-        <>
+    <div className="categories-container">
+      <IonRow className="category-grid">
+        {list.map((item) => (
           <IonCol
-            key={index}
-            size="2"
-            sizeLg="2"
-            sizeMd="2"
-            sizeXl="2"
-            sizeSm="6"
-            sizeXs="6"
+            key={item.id}
+            size="6" /* 2 items per row on very small screens */
+            sizeSm="4" /* 3 items on small phones */
+            sizeMd="3" /* 4 items on tablets */
+            sizeLg="2" /* 6 items on desktops */
+            className="category-col"
           >
             <CategoryCard
               id={item?.id}
@@ -25,9 +25,9 @@ const Categories: React.FC<CategoriesProps> = ({ list }) => {
               image={item?.image}
             />
           </IonCol>
-        </>
-      ))}
-    </IonRow>
+        ))}
+      </IonRow>
+    </div>
   );
 };
 

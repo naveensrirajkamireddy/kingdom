@@ -1,0 +1,120 @@
+/* cms.css */
+
+.cms-page-wrapper {
+  background-color: #f8fafc; /* Soft background */
+  padding: 80px 0;
+  min-height: 100vh;
+}
+
+.cms-card {
+  background: #ffffff;
+  padding: 60px 80px;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+  color: #1e293b;
+  line-height: 1.8;
+}
+
+/* Section Title with Gold/Maroon Accent */
+.cms-header {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.cms-title {
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+.cms-subtitle {
+  color: #a01e20; /* Kingdom Maroon */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Subheadings */
+.cms-card h2,
+.cms-card h3,
+.cms-card h4,
+.cms-card h5 {
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cms-card h2::before {
+  content: "";
+  width: 4px;
+  height: 28px;
+  background: #a01e20;
+  margin-right: 15px;
+  border-radius: 2px;
+}
+
+/* Content Text */
+.cms-card p {
+  font-size: 1.1rem;
+  color: #475569;
+  margin-bottom: 20px;
+}
+
+/* Premium List Items */
+.cms-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0;
+}
+
+.cms-card li {
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background: #fdfdfd;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.cms-card li:hover {
+  border-color: #a01e20;
+  transform: translateX(5px);
+}
+
+.cms-card li::before {
+  content: "✓";
+  color: #a01e20;
+  font-weight: 900;
+  margin-right: 15px;
+}
+
+/* Contact Info Box */
+.contact-info-box {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 30px;
+  margin-top: 40px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cms-card {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+  .cms-title {
+    font-size: 2rem;
+  }
+}

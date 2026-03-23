@@ -1,72 +1,202 @@
-.product-card {
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* =========================================
+   5-COLUMN GRID LOGIC FOR DESKTOP
+   ========================================= */
+@media (min-width: 992px) {
+  .pressmart-grid .grid-col-5 {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
 }
 
-/* .product-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
-} */
+/* =========================================
+   PRODUCT CARD STYLING
+   ========================================= */
+:root {
+  --pm-text-dark: #222222;
+  --pm-text-muted: #888888;
+  --pm-green: #3aa675;
+  --pm-orange: #f39c12;
+  --pm-star: #ffb800;
+  --pm-bg-grey: #f8f8f8;
+  --pm-transition: all 0.3s ease;
+}
 
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.pm-card-link {
+  text-decoration: none;
   display: block;
+  padding: 10px; /* Slight padding so items don't touch */
 }
-.product-overlay {
+
+.pm-product-card {
+  position: relative;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+  transition: var(--pm-transition);
+}
+
+/* --- Image Container & Hover Overlay --- */
+.pm-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5; /* Slightly tall image container */
+  background-color: var(--pm-bg-grey);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px; /* Very subtle rounding */
+}
+
+.pm-product-image {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  transition: transform 0.5s ease;
+}
+
+.pm-product-card:hover .pm-product-image {
+  transform: scale(1.05); /* Gentle zoom on hover */
+}
+
+/* --- Badges --- */
+.pm-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 2;
+}
+
+.pm-badge {
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.badge-green {
+  background-color: var(--pm-green);
+}
+.badge-orange {
+  background-color: var(--pm-orange);
+}
+
+/* --- Add To Cart Hover Button --- */
+.pm-action-overlay {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 100%;
-  height: 100%; /* Covers bottom half */
-  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  padding: 15px;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateY(100%);
+  opacity: 0;
+  transition: var(--pm-transition);
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1.5rem;
-  color: #fff;
-  transition: background 0.3s ease;
+  justify-content: center;
 }
 
-
-.product-info {
-  display: flex;
-  flex-direction: column;
+.pm-product-card:hover .pm-action-overlay {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-.product-title {
-  font-size: 1rem;
+.pm-add-cart-btn {
+  background-color: var(--pm-text-dark);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 80%;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+}
+
+.pm-add-cart-btn:hover {
+  background-color: var(--pm-green);
+}
+
+/* --- Info Area Below Image --- */
+.pm-info-area {
+  padding: 15px 0 10px;
+  text-align: left;
+}
+
+.pm-category {
+  display: block;
+  font-size: 11px;
+  color: var(--pm-text-muted);
+  margin-bottom: 4px;
+}
+
+.pm-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pm-text-dark);
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  /* Truncate long titles to 1 line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Ratings --- */
+.pm-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 8px;
+  color: var(--pm-star);
+  font-size: 12px;
+}
+
+.pm-rating-count {
+  color: var(--pm-text-muted);
+  font-size: 11px;
+  margin-left: 5px;
+}
+
+/* --- Price --- */
+.pm-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pm-current-price {
+  font-size: 14px;
   font-weight: 600;
-  margin: 0 0 0.2rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  color: var(--pm-text-dark);
 }
 
-.product-price {
-  font-size: 0.9rem;
-}
-
-.offer-price {
-  font-weight: 700;
-  color: #ffc107;
-  margin-right: 0.5rem;
-}
-
-.original-price {
+.pm-old-price {
+  font-size: 12px;
+  color: var(--pm-text-muted);
   text-decoration: line-through;
-  color: #ccc;
-}
-.product-card:hover .product-overlay {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
 }
 
-.product-info {
-  transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-info {
-  transform: translateY(-5px);
+/* --- Mobile / Touch Device Adjustments --- */
+@media (max-width: 991px) {
+  .pm-action-overlay {
+    display: none; /* Hide hover button on mobile */
+  }
 }

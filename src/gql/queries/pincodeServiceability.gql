@@ -1,0 +1,11 @@
+query CheckPincodeAvailability($pincode: Float!) {
+  checkPincodeAvailability(pincode: $pincode) {
+    delivery_codes {
+      postal_code {
+        pin
+        city
+        district
+      }
+    }
+  }
+}

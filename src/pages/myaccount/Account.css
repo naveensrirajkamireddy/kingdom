@@ -1,0 +1,451 @@
+/* --- Global Account Background --- */
+.account-page-bg {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  padding: 40px 0 80px 0;
+}
+
+/* --- Profile Header Card --- */
+.account-header-card {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  margin-bottom: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.profile-info-block {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  background: #a01e20; /* Maroon Theme */
+  color: white;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  box-shadow: 0 8px 15px rgba(160, 30, 32, 0.2);
+}
+
+.profile-text h2 {
+  margin: 0;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.profile-text p {
+  margin: 5px 0 0;
+  color: #64748b;
+}
+
+.quick-stats-row {
+  display: flex;
+  gap: 40px;
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.stat-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #94a3b8;
+}
+
+/* --- Navigation Sidebar --- */
+.account-nav-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+}
+
+.account-nav-list {
+  padding: 10px;
+  background: white;
+}
+
+.account-nav-item {
+  --background: transparent;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  --min-height: 54px;
+  margin-bottom: 5px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.account-nav-item ion-icon {
+  color: #64748b;
+  font-size: 20px;
+}
+
+.account-nav-item.is-active {
+  --background: #fdf2f2;
+  --color: #a01e20;
+  font-weight: 700;
+}
+
+.account-nav-item.is-active ion-icon {
+  color: #a01e20;
+}
+
+.account-nav-item.logout-item {
+  --color: #ef4444;
+}
+
+.nav-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 10px 15px;
+}
+
+/* --- Main Content Area --- */
+.account-main-content {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  min-height: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+}
+
+.welcome-placeholder {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.welcome-placeholder ion-icon {
+  font-size: 80px;
+  color: #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.welcome-placeholder h3 {
+  font-weight: 700;
+}
+
+.welcome-placeholder p {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 991px) {
+  .account-header-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  .profile-info-block {
+    flex-direction: column;
+  }
+  .account-main-content {
+    margin-top: 20px;
+    padding: 25px;
+  }
+}
+
+/* --- Address Page Specifics --- */
+.section-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.address-card {
+  background: #fdfdfd;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.address-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.address-card.default-border {
+  border-color: #a01e20;
+  background: #fffcfc;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.addr-type {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.customer-name {
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  color: #1e293b;
+}
+
+.full-address {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.card-actions {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 15px;
+}
+
+.card-actions button {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit-btn {
+  color: #a01e20;
+}
+.delete-btn {
+  color: #94a3b8;
+}
+
+/* --- Form Modal Styles --- */
+.form-input {
+  --background: #fff;
+  --border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.main-submit-btn {
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 700;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  width: 100%;
+}
+
+.empty-state ion-icon {
+  font-size: 50px;
+  color: #e2e8f0;
+  margin-bottom: 15px;
+}
+
+/* --- Order Page Specifics --- */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.order-main-card {
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.order-main-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.order-id {
+  font-weight: 800;
+  font-size: 14px;
+  color: #1a1a1a;
+  letter-spacing: 0.5px;
+}
+
+.order-date {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+.status-pill {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.order-card-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.product-preview-box {
+  width: 70px;
+  height: 85px;
+  position: relative;
+  background: #f8fafc;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #f1f5f9;
+}
+
+.product-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.extra-count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 100%;
+  font-size: 10px;
+  text-align: center;
+  padding: 2px 0;
+  backdrop-filter: blur(4px);
+  color: white;
+  font-weight: 700;
+}
+
+.order-summary {
+  flex: 1;
+}
+
+.order-summary h6 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.order-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .order-card-body {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .order-actions {
+    width: 100%;
+  }
+  .order-actions ion-button {
+    width: 100%;
+  }
+}
+
+/* --- Profile Page Specifics --- */
+.profile-settings-container {
+  max-width: 800px;
+}
+
+.settings-group {
+  margin-bottom: 20px;
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.group-title ion-icon {
+  font-size: 22px;
+  color: #a01e20; /* Kingdom Maroon */
+}
+
+.profile-input {
+  --background: #fcfcfd;
+  --border-radius: 12px;
+  --padding-start: 16px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Style for disabled inputs to look clean but readable */
+.profile-input.ios.input-disabled,
+.profile-input.md.input-disabled {
+  opacity: 0.8;
+  --background: #f1f5f9;
+  --color: #64748b;
+}
+
+.small-note {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* --- Responsive Layout Fix --- */
+@media (max-width: 768px) {
+  .profile-settings-container {
+    padding: 0;
+  }
+  .main-submit-btn {
+    width: 100% !important;
+  }
+}

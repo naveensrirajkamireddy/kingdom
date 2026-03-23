@@ -2,6 +2,7 @@ query SingleProduct($singleProductId: String!) {
   singleProduct(id: $singleProductId) {
     id
     productName
+    skuCode
     description
     status
     brandId
@@ -13,26 +14,32 @@ query SingleProduct($singleProductId: String!) {
     purchasePrice
     salePrice
     primaryImage
-    variants {
+    images {
       id
-      variantName
-      price
-      stockQuantity
-      status
-      images {
-        id
-        imageUrl
-        productVariantId {
-          id
-        }
-      }
+      imageUrl
       product {
         id
       }
     }
-    categoryName
+    variants {
+      id
+      variantName
+      color
+      size
+      price
+      discType
+      discValue
+      stockQuantity
+      status
+      product {
+        id
+      }
+    }
     brandName
+    categoryName
     materialName
     patternName
+    newArrival
+    featured
   }
 }

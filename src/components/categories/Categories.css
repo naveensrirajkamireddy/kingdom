@@ -1,0 +1,99 @@
+:root {
+  --premium-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.12);
+  --premium-hover-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.categories-container {
+  padding: 40px 15px;
+  background-color: #ffffff; /* Clean white background */
+}
+
+.category-grid {
+  margin: 0 -12px;
+}
+
+.category-col {
+  padding: 12px;
+}
+
+/* Card Wrapper */
+.category-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  width: 100%;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+/* The Premium "Squircle" Look */
+.category-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 160px;
+  border-radius: 24%; /* The Squircle shape */
+  overflow: hidden;
+  background-color: #fcfcfc;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--premium-shadow);
+  margin-bottom: 16px;
+  transition: var(--transition-smooth);
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease; /* Slow, elegant zoom */
+}
+
+/* Hover Effects */
+.category-card-wrapper:hover {
+  transform: translateY(-8px);
+}
+
+.category-card-wrapper:hover .category-image-container {
+  box-shadow: var(--premium-hover-shadow);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.category-card-wrapper:hover .category-img {
+  transform: scale(1.12);
+}
+
+/* Refined Typography */
+.category-name {
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #111;
+  text-align: center;
+  margin-top: 4px;
+  transition: color 0.3s ease;
+}
+
+.category-card-wrapper:hover .category-name {
+  color: #000; /* Or your brand color */
+  font-weight: 600;
+}
+
+/* Responsive Scaling */
+@media (max-width: 768px) {
+  .categories-container {
+    padding: 20px 10px;
+  }
+  .category-name {
+    font-size: 13px;
+  }
+  .category-image-container {
+    border-radius: 20%; /* Slightly sharper for smaller icons */
+  }
+}

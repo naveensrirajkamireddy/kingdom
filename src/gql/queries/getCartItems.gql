@@ -1,0 +1,14 @@
+query getCart {
+  getCartItems {
+    id
+    productId
+    productName
+    variantId
+    quantity
+    price
+    discType
+    discValue
+    image
+    finalPrice
+  }
+}

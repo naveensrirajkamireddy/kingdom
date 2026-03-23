@@ -9,11 +9,12 @@ const AuthenticationRoute: React.FC<AuthenticationProps> = ({
   ...rest
 }) => {
   const isAuthenticated = !!sessionStorage.getItem("isLoggedIn");
+  console.log("checking auth", isAuthenticated);
   return (
     <Route
       {...rest}
       render={(props: any) =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to={"/home"} />
+        isAuthenticated ? <Component {...props} /> : <Redirect to={"/login"} />
       }
     />
   );
