@@ -1,3 +1,5 @@
+import { useIonToast } from "@ionic/react";
+import { closeCircleOutline } from "ionicons/icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -12,7 +14,7 @@ export function raiseSuccessAlert(message: any) {
 
 export function raiseErrorAlert(message: any) {
   withReactContent(Swal).fire({
-    title: message,
+    titleText: message,
     icon: "error",
     timer: 2000,
     showConfirmButton: false,

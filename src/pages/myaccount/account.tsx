@@ -1,139 +1,116 @@
 import React from "react";
-import {
-  IonRow,
-  IonCol,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonIcon,
-  IonText,
-  IonButton,
-} from "@ionic/react";
-import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
-import {
-  cubeOutline,
-  locationOutline,
-  personOutline,
-  heartOutline,
-  logOutOutline,
-  chevronForwardOutline,
-} from "ionicons/icons";
-import { Container } from "react-bootstrap";
+import { IonIcon, IonButton } from "@ionic/react";
+import { Route, Switch, useRouteMatch, NavLink } from "react-router-dom";
+import { logOutOutline, arrowForwardOutline } from "ionicons/icons";
+import { Container, Row, Col } from "react-bootstrap";
 import StorefrontLayout from "../layout";
 import { useUser } from "../../context/userContext";
 
 // Import your sub-pages
 import AddressPage from "./address";
 import ProfilePage from "./profile";
-import OrdersPage from "./orders"; // Make sure to create/import this
+import OrdersPage from "./orders";
 import "./Account.css";
+import OrderDetailsPage from "./OrderDetailsPage";
 
 const AccountLayout: React.FC = () => {
   const { path, url } = useRouteMatch();
-  const { pathname } = useLocation();
   const { user, logout } = useUser();
 
   const menuItems = [
-    { label: "My Orders", path: `${url}/orders`, icon: cubeOutline },
-    { label: "Saved Addresses", path: `${url}/address`, icon: locationOutline },
-    { label: "Profile Settings", path: `${url}/profile`, icon: personOutline },
+    { label: "Dashboard", path: `${url}`, exact: true },
+    { label: "Order History", path: `${url}/orders`, exact: false },
+    // { label: "Saved Addresses", path: `${url}/address`, exact: false },
+    { label: "Account Details", path: `${url}/profile`, exact: false },
   ];
 
   return (
     <StorefrontLayout>
-      <div className="account-page-bg">
-        <Container>
-          {/* Profile Header */}
-          <div className="account-header-card">
-            <div className="profile-info-block">
-              <div className="profile-avatar">
-                {user?.customerName?.charAt(0) || "U"}
-              </div>
-              <div className="profile-text">
-                <IonText color="dark">
-                  <h2>Hello, {user?.customerName}!</h2>
-                </IonText>
-                <p>{user?.email || "Welcome to Kingdom Fashion"}</p>
-              </div>
-            </div>
-
-            <div className="quick-stats-row">
-              <div className="stat-box">
-                <span className="stat-value">12</span>
-                <span className="stat-label">Orders</span>
-              </div>
-              <div className="stat-box">
-                <span className="stat-value">04</span>
-                <span className="stat-label">Wishlist</span>
-              </div>
-            </div>
+      <div className="account-page-wrapper">
+        <Container className="px-lg-5">
+          {/* Elegant Page Header */}
+          <div className="account-page-header">
+            <h1 className="account-main-title">My Account</h1>
+            <p className="account-greeting">
+              Welcome back, {user?.customerName || "Guest"}
+            </p>
           </div>
 
-          <IonRow className="ion-margin-top">
-            {/* Sidebar Navigation */}
-            <IonCol size="12" sizeLg="3">
-              <div className="account-nav-card">
-                <IonList lines="none" className="account-nav-list">
+          <Row className="gx-lg-5">
+            {/* LEFT: Minimalist Sidebar Navigation */}
+            <Col lg={3}>
+              <aside className="account-sidebar">
+                <nav className="account-nav-menu">
                   {menuItems.map((item) => (
-                    <IonItem
+                    <NavLink
                       key={item.label}
-                      routerLink={item.path}
-                      /* Use startsWith to keep parent highlighted for sub-routes */
-                      className={`account-nav-item ${
-                        pathname.startsWith(item.path) ? "is-active" : ""
-                      }`}
-                      detail={false}
+                      to={item.path}
+                      exact={item.exact}
+                      className="account-nav-link"
+                      activeClassName="active-nav-link"
                     >
-                      <IonIcon icon={item.icon} slot="start" />
-                      <IonLabel>{item.label}</IonLabel>
-                      <IonIcon
-                        icon={chevronForwardOutline}
-                        slot="end"
-                        className="arrow"
-                      />
-                    </IonItem>
+                      {item.label}
+                    </NavLink>
                   ))}
-
-                  <div className="nav-divider"></div>
-
-                  <IonItem
-                    button
+                  <button
                     onClick={logout}
-                    className="account-nav-item logout-item"
+                    className="account-nav-link logout-btn"
                   >
-                    <IonIcon icon={logOutOutline} slot="start" />
-                    <IonLabel>Sign Out</IonLabel>
-                  </IonItem>
-                </IonList>
-              </div>
-            </IonCol>
+                    Sign Out <IonIcon icon={logOutOutline} className="ms-2" />
+                  </button>
+                </nav>
+              </aside>
+            </Col>
 
-            {/* Nested Content Area */}
-            <IonCol size="12" sizeLg="9">
-              <div className="account-main-content">
+            {/* RIGHT: Dynamic Content Pane */}
+            <Col lg={9}>
+              <main className="account-content-pane">
                 <Switch>
-                  {/* Order of Routes matters: place specific ones first */}
-                  <Route path={`${path}/orders`} component={OrdersPage} />
-                  <Route path={`${path}/address`} component={AddressPage} />
+                  {/* 1. MOST SPECIFIC ROUTE MUST GO FIRST */}
+                  <Route
+                    path={`${path}/orders/:id`}
+                    component={OrderDetailsPage}
+                  />
+
+                  {/* 2. GENERAL ROUTE GOES SECOND, WITH 'exact' */}
+                  <Route exact path={`${path}/orders`} component={OrdersPage} />
+
+                  {/* 3. OTHER ROUTES */}
+                  {/* <Route path={`${path}/address`} component={AddressPage} /> */}
                   <Route path={`${path}/profile`} component={ProfilePage} />
 
-                  {/* Default Account Dashboard */}
+                  {/* 4. Default Account Dashboard View */}
                   <Route exact path={path}>
-                    <div className="welcome-placeholder">
-                      <IonIcon icon={personOutline} />
-                      <h3>Account Dashboard</h3>
-                      <p>
-                        Manage your profile, orders, and addresses from here.
+                    <div className="dashboard-overview">
+                      <h2 className="pane-title">Dashboard</h2>
+                      <p className="pane-subtitle">
+                        From your account dashboard, you can view your recent
+                        orders, manage your shipping addresses, and edit your
+                        password and account details.
                       </p>
-                      <IonButton fill="outline" color="dark" routerLink="/shop">
-                        Continue Shopping
-                      </IonButton>
+
+                      <div className="dashboard-quick-links">
+                        <div className="quick-link-card">
+                          <h3>Recent Orders</h3>
+                          <p>Check the status of your recent purchases.</p>
+                          <NavLink to={`${url}/orders`} className="text-link">
+                            View Orders <IonIcon icon={arrowForwardOutline} />
+                          </NavLink>
+                        </div>
+                        <div className="quick-link-card">
+                          <h3>Account Details</h3>
+                          <p>Update your personal information and password.</p>
+                          <NavLink to={`${url}/profile`} className="text-link">
+                            Edit Profile <IonIcon icon={arrowForwardOutline} />
+                          </NavLink>
+                        </div>
+                      </div>
                     </div>
                   </Route>
                 </Switch>
-              </div>
-            </IonCol>
-          </IonRow>
+              </main>
+            </Col>
+          </Row>
         </Container>
       </div>
     </StorefrontLayout>

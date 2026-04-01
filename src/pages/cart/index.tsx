@@ -6,6 +6,7 @@ import {
   IonText,
   IonSpinner,
   useIonLoading,
+  useIonViewWillEnter, // 1. Imported Ionic lifecycle hook
 } from "@ionic/react";
 import {
   trashOutline,
@@ -29,6 +30,12 @@ const CartPage: React.FC = () => {
 
   const { data, refetch, loading } = useGetCartQuery({
     fetchPolicy: "network-only",
+    notifyOnNetworkStatusChange: true, // Optional: helps UI react to refetches
+  });
+
+  // 2. Added the lifecycle hook to manually trigger a refetch on routing
+  useIonViewWillEnter(() => {
+    refetch();
   });
 
   const cartList = data?.getCartItems || [];
@@ -137,7 +144,8 @@ const CartPage: React.FC = () => {
                               </span>
                               <h4 className="item-name">{item.productName}</h4>
                               <p className="item-meta">
-                                Size: Default | Color: Standard
+                                Size: {item.variantInfo?.size} | Color:{" "}
+                                {item.variantInfo?.color}
                               </p>
                             </div>
                             <button

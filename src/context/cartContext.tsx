@@ -5,7 +5,7 @@ import {
   useRemoveFromCartMutation,
 } from "../graphql/generated";
 import { useUser } from "./userContext";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom"; // Ensure this is imported from react-router-dom
 import { raiseSuccessAlert } from "../utils";
 
 // Define the shape of items coming from/going to the backend
@@ -39,9 +39,22 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const [cart, setCart] = useState<CartItem[]>([]);
   const { user } = useUser();
   const customerId = user?.customerId ?? "";
+
+  // Try to get history, but don't crash if it's undefined
   const history = useHistory();
 
-  // GraphQL Hooks
+  // --- Safe Navigation Helper ---
+  // If the provider is outside the Router, history will be undefined.
+  // This safely falls back to window.location.
+  const navigateToLogin = () => {
+    if (history) {
+      history.push("/login");
+    } else {
+      window.location.href = "/login";
+    }
+  };
+
+  // --- GraphQL Hooks ---
   const [addToCartMutation] = useAddToCartMutation();
   const [removeCartItemMutation] = useRemoveFromCartMutation();
   const { data: cartCountData, refetch: refetchCartCount } =
@@ -74,7 +87,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         console.error("Add to cart error:", error.message);
       }
     } else {
-      history.push("/login");
+      navigateToLogin();
     }
   };
 
@@ -83,11 +96,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
    */
   const updateQuantity = async (cartItem: any, newQty: number) => {
     if (!customerId) {
-      history.push("/login");
+      navigateToLogin();
       return;
     }
 
-    // If quantity is reduced to 0, remove the item
+    // If quantity is reduced to 0, remove the item entirely
     if (newQty < 1) {
       await removeFromCart(cartItem);
       return;
@@ -127,7 +140,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         console.error("Remove from cart error:", error.message);
       }
     } else if (!customerId) {
-      history.push("/login");
+      navigateToLogin();
     }
   };
 
@@ -138,9 +151,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     if (customerId) {
       setCart([]);
       getCartCount();
-      // Logic for clearCart backend mutation can be added here if needed
+      // Logic for clearCart backend mutation can be added here if you have one setup
     } else {
-      history.push("/login");
+      navigateToLogin();
     }
   };
 

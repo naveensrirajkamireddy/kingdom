@@ -36,22 +36,22 @@ const PromoGridSection: React.FC<PromoGridProps> = ({
             } else if (index === 1) {
               layoutClass = "promo-small";
               linkNode = (
-                <Link to={`/shop/${catId}`} className="text-link-light">
-                  Shop Now &gt;
+                <Link to={`/shop/${catId}`} className="btn-outline-light">
+                  Shop Now
                 </Link>
               );
             } else if (index === 2) {
               layoutClass = "promo-small";
               linkNode = (
-                <Link to={`/shop/${catId}`} className="text-link-light">
-                  Shop Now &gt;
+                <Link to={`/shop/${catId}`} className="btn-outline-light">
+                  Shop Now
                 </Link>
               );
             } else if (index === 3) {
               layoutClass = "promo-wide";
               linkNode = (
-                <Link to={`/shop/${catId}`} className="text-link-light">
-                  Shop Now &gt;
+                <Link to={`/shop/${catId}`} className="btn-outline-light">
+                  Shop Now
                 </Link>
               );
             }

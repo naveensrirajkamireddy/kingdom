@@ -1,13 +1,14 @@
 import React from "react";
 import "./ProductCard.css";
-import { IonRouterLink, IonIcon } from "@ionic/react";
-import { star, starHalf } from "ionicons/icons"; // Using Ionic icons for ratings
+import { IonIcon } from "@ionic/react";
+import { star, starHalf } from "ionicons/icons";
+import { useHistory } from "react-router-dom"; // Imported useHistory
 
 interface ProductCardProps {
   id: string;
   productName: string;
   primaryImage: string;
-  brandName?: string; // Using this as the "Category" (e.g., Backpacks, Jackets)
+  brandName?: string;
   variants?: {
     id: string;
     price: number;
@@ -19,7 +20,7 @@ interface ProductCardProps {
     }[];
   }[];
   onAddToCart?: (id: string) => void;
-  tabMode?: "new" | "featured"; // Optional prop to indicate which tab's products are being displayed
+  tabMode?: "new" | "featured";
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -31,10 +32,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
   tabMode,
 }) => {
+  const history = useHistory(); // Initialize history for programmatic routing
+
+  // --- Handlers ---
+  const handleCardClick = () => {
+    history.push(`/detail/${id}`);
+  };
+
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
-    onAddToCart && onAddToCart(id);
+    e.stopPropagation(); // Now this will successfully stop the card click!
+    if (onAddToCart) {
+      onAddToCart(id);
+    }
   };
 
   const renderPricingAndBadges = () => {
@@ -53,7 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
 
     const hasDiscount = finalPrice < basePrice;
-    console.log(tabMode, "Tab Mode in ProductCard");
+
     return (
       <>
         {/* --- Image & Badges --- */}
@@ -62,7 +72,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {hasDiscount && (
               <span className="pm-badge badge-green">{discountLabel}</span>
             )}
-            {/* Hardcoded Featured badge to match mockup - make dynamic as needed */}
             {tabMode && tabMode === "featured" ? (
               <span className="pm-badge badge-green">Featured</span>
             ) : tabMode === "new" ? (
@@ -91,7 +100,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <span className="pm-category">{brandName}</span>
           <h5 className="pm-title">{productName}</h5>
 
-          {/* Star Rating (Static placeholder to match mockup) */}
+          {/* Star Rating */}
           <div className="pm-rating">
             <IonIcon icon={star} />
             <IonIcon icon={star} />
@@ -114,9 +123,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <IonRouterLink routerLink={`/detail/${id}`} className="pm-card-link">
+    /* Replaced IonRouterLink with a standard div and onClick handler */
+    <div
+      className="pm-card-link"
+      onClick={handleCardClick}
+      style={{ cursor: "pointer" }}
+    >
       <div className="pm-product-card">{renderPricingAndBadges()}</div>
-    </IonRouterLink>
+    </div>
   );
 };
 

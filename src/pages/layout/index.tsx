@@ -20,9 +20,13 @@ import {
   heartOutline,
   cartOutline,
 } from "ionicons/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom"; // Added useHistory
 import "./StoreFrontLayout.css";
 import { useGetCategoriesQuery } from "../../graphql/generated";
+
+import { useCart } from "../../context/cartContext";
+// 1. Import useUser to check authentication status
+import { useUser } from "../../context/userContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -30,10 +34,16 @@ interface LayoutProps {
 
 const StorefrontLayout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
+  const history = useHistory();
 
   const { data } = useGetCategoriesQuery({
     variables: { parentMenu: "" },
   });
+
+  const { cartCount } = useCart();
+
+  // 2. Destructure the user from your context
+  const { user } = useUser();
 
   return (
     <>
@@ -88,22 +98,28 @@ const StorefrontLayout: React.FC<LayoutProps> = ({ children }) => {
           </IonList>
         </IonContent>
 
+        {/* 3. Updated Mobile Drawer Footer Button */}
         <div className="drawer-footer-premium">
-          <button className="nav-login-btn w-100">Login / Register</button>
+          <IonMenuToggle autoHide={false}>
+            <button
+              className="nav-login-btn w-100"
+              onClick={() => history.push(user ? "/account" : "/login")}
+            >
+              {user ? "My Account" : "Login / Register"}
+            </button>
+          </IonMenuToggle>
         </div>
       </IonMenu>
 
       {/* --- 2. MAIN PAGE CONTENT --- */}
-      {/* The id here MUST match the contentId in IonMenu */}
       <IonPage id="main-content">
         {/* Main Navigation Header */}
         <IonHeader className="ion-no-border main-header">
           <IonToolbar className="main-nav-toolbar px-2 px-lg-4">
-            {/* Mobile Menu Toggle (Replaced static button with IonMenuButton) */}
+            {/* Mobile Menu Toggle */}
             <IonButtons slot="start" className="d-lg-none">
               <IonMenuButton className="action-item" />
             </IonButtons>
-
             {/* Logo */}
             <div className="logo-container" slot="start">
               <Link to="/" className="store-logo">
@@ -114,7 +130,6 @@ const StorefrontLayout: React.FC<LayoutProps> = ({ children }) => {
                 />
               </Link>
             </div>
-
             {/* Desktop Center Links */}
             <div className="desktop-links-container d-none d-lg-flex w-100">
               <Link to="/" className="nav-link-custom active">
@@ -136,15 +151,22 @@ const StorefrontLayout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Action Icons (Right) */}
             <IonButtons slot="end" className="action-icons">
+              {/* 4. Updated Desktop Profile Icon logic */}
               <IonButton
                 className="action-item d-none d-sm-block"
-                href="/login"
+                routerLink={user ? "/account" : "/login"}
               >
                 <IonIcon icon={personOutline} />
               </IonButton>
-              <IonButton className="action-item position-relative">
+
+              <IonButton
+                className="action-item position-relative"
+                routerLink="/cart"
+              >
                 <IonIcon icon={cartOutline} />
-                <span className="badge-dot">0</span>
+                {cartCount > 0 && (
+                  <span className="badge-dot">{cartCount}</span>
+                )}
               </IonButton>
             </IonButtons>
           </IonToolbar>

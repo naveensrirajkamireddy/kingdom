@@ -43,8 +43,8 @@ const CategoryProductRow: React.FC<CategoryProductRowProps> = ({
   return (
     <section className="category-spotlight-section py-5">
       <Container>
-        <div className="section-title-wrapper">
-          <h2 className="main-title">{categoryName}</h2>
+        <div className="ghost-title-wrapper" data-title={categoryName}>
+          <h2 className="ghost-main-title">{categoryName}</h2>
         </div>
         <Products list={products} />
       </Container>

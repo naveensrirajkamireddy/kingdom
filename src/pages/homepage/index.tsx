@@ -59,8 +59,8 @@ const Home: React.FC = () => {
         {/* Tabbed Products (State stays here since it dictates data fetching) */}
         <section className="featured-products-section">
           <Container>
-            <div className="section-title-wrapper">
-              <h2 className="main-title">Featured Products</h2>
+            <div className="ghost-title-wrapper">
+              <h2 className="ghost-main-title mb-5">Featured Products</h2>
               <div className="product-tabs">
                 <button
                   className={`tab-btn ${activeTab === "new" ? "active" : ""}`}
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
              You can adjust this number, or filter by a 'featured' flag if your category data has one. 
            */
           categories
-            .slice(0, 3)
+            .slice(0, 10)
             .map((category) => (
               <CategoryProductRow
                 key={category.id}

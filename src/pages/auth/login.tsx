@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { IonButton, IonInput } from "@ionic/react";
+import { IonIcon, IonSpinner } from "@ionic/react";
+import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 import { Link, useHistory } from "react-router-dom";
 import styles from "./AuthCard.module.css";
 import StorefrontLayout from "../layout";
@@ -9,6 +10,7 @@ import { raiseErrorAlert } from "../../utils";
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
   const { setUser } = useUser();
   const [loginMutation, { loading }] = useLoginCustomerMutation();
@@ -23,10 +25,18 @@ const Login = () => {
       if (user) {
         setUser(user);
         sessionStorage.setItem("customerData", JSON.stringify(user));
-        history.push("/home");
+        history.push("/home"); // or /account
       }
-    } catch (error) {
-      raiseErrorAlert(error);
+    } catch (error: any) {
+      let cleanMessage = "Something went wrong. Please try again.";
+
+      if (error.message) {
+        cleanMessage = error.message
+          .replace("Error: ", "")
+          .replace("GraphQL error: ", "")
+          .trim();
+      }
+      raiseErrorAlert(cleanMessage);
     }
   };
 
@@ -39,56 +49,77 @@ const Login = () => {
               src="/favicon.png"
               className={styles.logoImage}
               alt="Kingdom Logo"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/logo-dark.png"; // fallback
+              }}
             />
           </div>
-          <h2 className={styles.title}>Welcome Back</h2>
+          <h2 className={styles.title}>Sign In</h2>
           <p className={styles.subtitle}>
-            Enter your credentials to access the Kingdom
+            Access your Kingdom account and saved collections.
           </p>
 
-          <form onSubmit={handleLogin}>
-            <IonInput
-              className={styles.inputField}
-              label="Email or Mobile"
-              labelPlacement="stacked"
-              fill="outline"
-              value={formData.username}
-              onIonInput={(e) =>
-                setFormData({ ...formData, username: e.detail.value! })
-              }
-            />
-            <IonInput
-              className={styles.inputField}
-              label="Password"
-              labelPlacement="stacked"
-              type="password"
-              fill="outline"
-              value={formData.password}
-              onIonInput={(e) =>
-                setFormData({ ...formData, password: e.detail.value! })
-              }
-            />
-            <IonButton
-              expand="block"
+          <form onSubmit={handleLogin} className={styles.formContainer}>
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Email or Mobile</label>
+              <input
+                type="text"
+                className={styles.inputField}
+                placeholder="Enter your email or phone"
+                required
+                value={formData.username}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.labelRow}>
+                <label className={styles.label}>Password</label>
+                <Link to="/forgot" className={styles.forgotLink}>
+                  Forgot?
+                </Link>
+              </div>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className={styles.inputField}
+                  placeholder="Enter your password"
+                  required
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  className={styles.eyeButton}
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  <IonIcon icon={showPassword ? eyeOffOutline : eyeOutline} />
+                </button>
+              </div>
+            </div>
+
+            <button
               type="submit"
               className={styles.primaryButton}
               disabled={loading}
             >
-              {loading ? "Authenticating..." : "Sign In"}
-            </IonButton>
+              {loading ? <IonSpinner name="crescent" /> : "Sign In"}
+            </button>
           </form>
 
-          <div className={styles.linkText}>
-            <p>
-              <Link to="/forgot">Forgot Password?</Link>
-            </p>
-            <div className={styles.divider}>
-              <span>OR</span>
-            </div>
-            <p>
-              New to Kingdom? <Link to="/register">Create Account</Link>
-            </p>
+          <div className={styles.divider}>
+            <span>New to Kingdom?</span>
           </div>
+
+          <Link to="/register" className={styles.secondaryButton}>
+            Create an Account
+          </Link>
         </div>
       </div>
     </StorefrontLayout>

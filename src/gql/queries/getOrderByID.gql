@@ -1,0 +1,45 @@
+query GetOrderByID($orderId: String!) {
+  getOrderByID(orderId: $orderId) {
+    ordersData {
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+      id
+      orderId
+      invoiceNo
+      addressId
+      transactionId
+      paymentMode
+      totalAmount
+      status
+      transactionType
+    }
+    orderItems {
+      id
+      orderId
+      productId
+      variantId
+      price
+      discType
+      discValue
+      finalPrice
+      quantity
+      productName
+      primaryImage
+      size
+    }
+    addressData {
+      id
+      customerId
+      addressLine1
+      addressLine2
+      city
+      state
+      postalCode
+      country
+      isDefault
+    }
+    customerName
+  }
+}

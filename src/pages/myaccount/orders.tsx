@@ -1,128 +1,142 @@
 import React, { useEffect, useState } from "react";
-import {
-  IonButton,
-  IonIcon,
-  IonBadge,
-  IonRow,
-  IonCol,
-  IonText,
-} from "@ionic/react";
-import {
-  cubeOutline,
-  chevronForwardOutline,
-  timeOutline,
-  checkmarkCircleOutline,
-  closeCircleOutline,
-} from "ionicons/icons";
+import { IonIcon, IonSpinner } from "@ionic/react";
+import { cubeOutline, arrowForwardOutline } from "ionicons/icons";
 import { Link } from "react-router-dom";
 import { useGetMyOrdersQuery } from "../../graphql/generated";
 import { useUser } from "../../context/userContext";
 
 const OrdersPage: React.FC = () => {
   const { user } = useUser();
+  const [orders, setOrders] = useState<any[]>([]);
 
   const { data, loading } = useGetMyOrdersQuery({
-    // 1. You must provide the required pagination variables
     variables: {
       pagination: {
         page: 1,
         limit: 10,
       },
     },
-    // 2. Best Practice: Skip the query if user or token isn't available yet
     skip: !user?.authToken,
-
-    // 3. Your custom headers
     context: {
       headers: {
         Authorization: `Bearer ${user?.authToken}`,
       },
     },
   });
-  // 1. Update the type definition (Check your generated.ts for the exact name)
-  const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
     if (data?.getMyOrders?.data) {
-      setOrders(data.getMyOrders.data); // Access the .data array
+      setOrders(data.getMyOrders.data);
     }
-  }, [data]); // Added [data] dependency to avoid infinite loops
+  }, [data]);
 
-  console.log(orders);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Delivered":
-        return "success";
-      case "Processing":
-        return "warning";
-      case "Cancelled":
-        return "danger";
-      default:
-        return "medium";
-    }
+  // Helper to safely format dates if your backend returns them
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "Recent";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   return (
-    <div className="orders-wrapper">
-      <div className="section-header-flex">
-        <h4 className="fw-bold">Order History</h4>
-        <span className="text-muted small">{orders.length} orders placed</span>
+    <div className="orders-book-wrapper">
+      <div className="pane-header-flex">
+        <div>
+          <h2 className="pane-title">Order History</h2>
+          <p className="pane-subtitle">
+            Track, return, or repurchase items from past orders.
+          </p>
+        </div>
       </div>
 
-      {orders.length > 0 ? (
-        <div className="orders-list">
+      {loading ? (
+        <div className="premium-loading-state">
+          <IonSpinner name="crescent" />
+          <p>Fetching your orders...</p>
+        </div>
+      ) : orders.length > 0 ? (
+        <div className="premium-orders-list">
           {orders.map((order) => (
-            <div key={order.id} className="order-main-card">
+            <div key={order.id} className="premium-order-card">
+              {/* Card Header (ID, Date, Status) */}
               <div className="order-card-header">
-                <div>
-                  <span className="order-id">ID: {order.orderId}</span>
+                <div className="order-meta">
+                  <span className="order-number">
+                    Order #{order.orderId || order.id?.substring(0, 8)}
+                  </span>
+                  <span className="order-date">
+                    Placed on {formatDate(order.createdAt)}
+                  </span>
                 </div>
-                <IonBadge
-                  color={getStatusColor(order.status)}
-                  className="status-pill"
+                <span
+                  className={`status-badge status-${order.status?.toLowerCase() || "processing"}`}
                 >
-                  {order.status}
-                </IonBadge>
+                  {order.status || "Processing"}
+                </span>
               </div>
 
+              {/* Card Body (Details & Actions) */}
               <div className="order-card-body">
-                <div className="product-preview-box">
-                  <img src={order.previewImg} alt="product" />
-                  {order.itemCount > 1 && (
-                    <div className="extra-count">+{order.itemCount - 1}</div>
-                  )}
-                </div>
+                <div className="order-preview-info">
+                  <div className="order-images-stack">
+                    {/* Placeholder for item image - use order.previewImg if available */}
+                    <img
+                      src={order.previewImg || "/no-image.png"}
+                      alt="Order Preview"
+                      className="order-thumb"
+                      onError={(e) => {
+                        e.currentTarget.src = "/no-image.png";
+                      }}
+                    />
+                    {order.itemCount > 1 && (
+                      <div className="extra-items-badge">
+                        +{order.itemCount - 1}
+                      </div>
+                    )}
+                  </div>
 
-                <div className="order-summary">
-                  <IonText color="dark">
-                    <h6>{/* Total: <b>₹{order.total.toFixed(2)}</b> */}</h6>
-                  </IonText>
-                  <p className="small text-muted">{order.itemCount} Items</p>
+                  <div className="order-summary-text">
+                    <p className="item-count-text">
+                      {order.itemCount || 1} Items
+                    </p>
+                    <h5 className="order-total-price">
+                      ₹
+                      {order.totalAmount?.toLocaleString() ||
+                        order.total?.toLocaleString() ||
+                        "0.00"}
+                    </h5>
+                  </div>
                 </div>
 
                 <div className="order-actions">
-                  <IonButton
-                    fill="outline"
-                    color="dark"
-                    size="small"
-                    routerLink={`/account/orders/${order.id}`}
+                  <Link
+                    to={`/account/orders/${order.id}`}
+                    className="premium-outline-btn"
                   >
-                    View Details
-                  </IonButton>
+                    View Details <IonIcon icon={arrowForwardOutline} />
+                  </Link>
                 </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="empty-state">
-          <IonIcon icon={cubeOutline} />
-          <h5>No orders yet</h5>
+        <div className="premium-empty-state">
+          <div className="empty-icon-circle">
+            <IonIcon icon={cubeOutline} />
+          </div>
+          <h3>No orders yet</h3>
           <p>When you place an order, it will appear here.</p>
-          <IonButton fill="solid" color="dark" routerLink="/shop">
+          <Link
+            to="/shop"
+            className="premium-action-btn mt-3"
+            style={{ display: "inline-flex" }}
+          >
             Start Shopping
-          </IonButton>
+          </Link>
         </div>
       )}
     </div>

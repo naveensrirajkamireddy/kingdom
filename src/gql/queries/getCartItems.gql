@@ -1,14 +1,28 @@
-query getCart {
+query GetCart {
   getCartItems {
-    id
-    productId
-    productName
-    variantId
-    quantity
-    price
+    variantInfo {
+      id
+      variantName
+      color
+      size
+      price
+      discType
+      discValue
+      stockQuantity
+      status
+      product {
+      id    
+      }
+    }
     discType
     discValue
-    image
     finalPrice
+    id
+    image
+    price
+    productId
+    productName
+    quantity
+    variantId
   }
 }
