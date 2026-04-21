@@ -5,6 +5,8 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { Preferences } from "@capacitor/preferences";
+import { setCachedToken } from "../apolloClient";
 
 interface User {
   customerId: string;
@@ -19,7 +21,8 @@ interface User {
 interface UserContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  logout: () => void;
+  logout: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -27,19 +30,52 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const stored = sessionStorage.getItem("customerData");
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [user, setUserState] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const logout = () => {
-    sessionStorage.clear();
-    setUser(null);
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const { value } = await Preferences.get({ key: "customerData" });
+        if (value) {
+          const parsed = JSON.parse(value);
+          setUserState(parsed);
+          setCachedToken(parsed.authToken);
+        }
+      } catch (error) {
+        console.error("Error loading user data from Preferences:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadUser();
+  }, []);
+
+  const setUser: React.Dispatch<React.SetStateAction<User | null>> = (newUser) => {
+    setUserState(prevState => {
+      const updatedUser = typeof newUser === 'function' ? newUser(prevState) : newUser;
+      
+      if (updatedUser) {
+        Preferences.set({ key: "customerData", value: JSON.stringify(updatedUser) });
+        setCachedToken(updatedUser.authToken);
+      } else {
+        Preferences.remove({ key: "customerData" });
+        setCachedToken(null);
+      }
+      
+      return updatedUser;
+    });
+  };
+
+  const logout = async () => {
+    await Preferences.remove({ key: "customerData" });
+    setUserState(null);
+    setCachedToken(null);
     window.location.href = "/home"; // or useHistory().push("/home") if needed
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider value={{ user, setUser, logout, isLoading }}>
       {children}
     </UserContext.Provider>
   );

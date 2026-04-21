@@ -65,15 +65,23 @@ import ForgotPassword from "./pages/auth/forgot";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import PhonePePayment from "./pages/sample";
+import { useUser } from "./context/userContext";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const loader = useLoader();
 
+  const { isLoading } = useUser();
+
   useEffect(() => {
     setLoaderControl(loader);
   }, [loader]);
+
+  if (isLoading) {
+    return null; // Or a splash screen
+  }
+
   return (
     <IonApp>
       <IonReactRouter>

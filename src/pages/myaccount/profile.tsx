@@ -8,10 +8,11 @@ import {
 import { Row, Col } from "react-bootstrap";
 import { useUser } from "../../context/userContext";
 import { useChangePasswordMutation } from "../../graphql/generated";
-import { raiseErrorAlert, raiseSuccessAlert } from "../../utils";
+import { useToast } from "../../context/toastContext";
 
 const ProfilePage: React.FC = () => {
   const { user } = useUser();
+  const { showSuccess, showError } = useToast();
   const [passwords, setPasswords] = useState({ old: "", new: "", confirm: "" });
 
   const [changePasswordMutation, { loading }] = useChangePasswordMutation();
@@ -25,19 +26,19 @@ const ProfilePage: React.FC = () => {
 
     // 1. Validation with explicit Error Alerts
     if (!user?.email) {
-      raiseErrorAlert("Error: Email is missing from your account profile.");
+      showError("Error: Email is missing from your account profile.");
       return;
     }
     if (!passwords.old || !passwords.new || !passwords.confirm) {
-      raiseErrorAlert("Please fill out all password fields.");
+      showError("Please fill out all password fields.");
       return;
     }
     if (passwords.new !== passwords.confirm) {
-      raiseErrorAlert("New passwords do not match!");
+      showError("New passwords do not match!");
       return;
     }
     if (passwords.new.length < 6) {
-      raiseErrorAlert("New password must be at least 6 characters.");
+      showError("New password must be at least 6 characters.");
       return;
     }
 
@@ -55,7 +56,7 @@ const ProfilePage: React.FC = () => {
 
       // 3. Handle Success
       if (response.data?.changePassword) {
-        raiseSuccessAlert("Your password has been securely updated.");
+        showSuccess("Your password has been securely updated.");
         // Clear the form fields after success
         setPasswords({ old: "", new: "", confirm: "" });
       }
@@ -70,7 +71,7 @@ const ProfilePage: React.FC = () => {
           .replace("GraphQL error: ", "")
           .trim();
       }
-      raiseErrorAlert(cleanMessage);
+      showError(cleanMessage);
     }
   };
 

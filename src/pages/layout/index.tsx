@@ -23,6 +23,7 @@ import {
 import { Link, useLocation, useHistory } from "react-router-dom"; // Added useHistory
 import "./StoreFrontLayout.css";
 import { useGetCategoriesQuery } from "../../graphql/generated";
+import Footer from "../footer";
 
 import { useCart } from "../../context/cartContext";
 // 1. Import useUser to check authentication status
@@ -173,7 +174,10 @@ const StorefrontLayout: React.FC<LayoutProps> = ({ children }) => {
         </IonHeader>
 
         {/* Dynamic Page Content */}
-        <IonContent>{children}</IonContent>
+        <IonContent>
+          {children}
+          <Footer />
+        </IonContent>
       </IonPage>
     </>
   );

@@ -6,7 +6,7 @@ import {
 } from "../graphql/generated";
 import { useUser } from "./userContext";
 import { useHistory } from "react-router-dom"; // Ensure this is imported from react-router-dom
-import { raiseSuccessAlert } from "../utils";
+import { useToast } from "./toastContext";
 
 // Define the shape of items coming from/going to the backend
 interface CartItem {
@@ -42,6 +42,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   // Try to get history, but don't crash if it's undefined
   const history = useHistory();
+  const { showSuccess, showError } = useToast();
 
   // --- Safe Navigation Helper ---
   // If the provider is outside the Router, history will be undefined.
@@ -82,9 +83,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           },
         });
         await getCartCount();
-        raiseSuccessAlert("Added to bag successfully!");
+        showSuccess("Added to bag successfully!");
       } catch (error: any) {
         console.error("Add to cart error:", error.message);
+        showError("Failed to add to bag.");
       }
     } else {
       navigateToLogin();
@@ -121,6 +123,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       await getCartCount();
     } catch (error: any) {
       console.error("Update quantity error:", error.message);
+      showError("Failed to update item quantity.");
     }
   };
 
@@ -136,8 +139,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           variables: { variantId: variantId },
         });
         await getCartCount();
+        showSuccess("Item removed from bag.");
       } catch (error: any) {
         console.error("Remove from cart error:", error.message);
+        showError("Failed to remove item.");
       }
     } else if (!customerId) {
       navigateToLogin();

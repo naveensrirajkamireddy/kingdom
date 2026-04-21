@@ -125,11 +125,11 @@ const OrderDetailsPage: React.FC = () => {
                   </div>
                   <div className="item-price-block">
                     <span className="item-final-price">
-                      ₹{(item.finalPrice * item.quantity).toLocaleString()}
+                      ₹{(item.price * item.quantity).toFixed(2)}
                     </span>
-                    {item.price > item.finalPrice && (
+                    {item.price > item.price && (
                       <span className="item-original-price">
-                        ₹{(item.price * item.quantity).toLocaleString()}
+                        ₹{(item.price * item.quantity).toFixed(2)}
                       </span>
                     )}
                   </div>
@@ -164,7 +164,7 @@ const OrderDetailsPage: React.FC = () => {
               <div className="summary-line total-line">
                 <span>Total Amount</span>
                 <span>
-                  ₹{ordersData?.totalAmount?.toLocaleString() || "0.00"}
+                  ₹{ordersData?.totalAmount?.toFixed(2) || "0.00"}
                 </span>
               </div>
             </div>

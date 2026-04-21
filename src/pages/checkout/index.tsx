@@ -19,7 +19,7 @@ import {
   useIonLoading,
 } from "@ionic/react";
 import { useHistory } from "react-router";
-import { raiseErrorAlert, raiseSuccessAlert } from "../../utils";
+import { useToast } from "../../context/toastContext";
 import { Container } from "react-bootstrap";
 import {
   locationOutline,
@@ -37,6 +37,7 @@ const Checkout: React.FC = () => {
   const { user } = useUser();
   const history = useHistory();
   const [present, dismiss] = useIonLoading();
+  const { showError, showSuccess } = useToast();
 
   const [selectedAddressId, setSelectedAddressId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("COD");
@@ -65,8 +66,15 @@ const Checkout: React.FC = () => {
   }, [cartData]);
 
   const handleSaveAddress = async () => {
-    if (!addressForm.line1 || !addressForm.city || !addressForm.zip)
-      return raiseErrorAlert("Required fields missing.");
+    if (!addressForm.line1.trim() || !addressForm.city.trim() || !addressForm.zip.trim())
+      return showError("Required fields (Address, City, Zip) are missing.");
+
+    // Zip Code Validation (Example for 6 digits, can be adjusted)
+    const zipRegex = /^[0-9]{5,6}$/;
+    if (!zipRegex.test(addressForm.zip)) {
+      return showError("Please enter a valid Zip Code (5-6 digits).");
+    }
+
     try {
       await present("Registering Address...");
       await addAddressMutation({
@@ -83,8 +91,9 @@ const Checkout: React.FC = () => {
       });
       refetch();
       setIsModalOpen(false);
+      showSuccess("Address added successfully.");
     } catch (err: any) {
-      raiseErrorAlert(err.message);
+      showError(err.message || "Failed to add address.");
     } finally {
       dismiss();
     }
@@ -92,7 +101,7 @@ const Checkout: React.FC = () => {
 
   const handleCheckout = async () => {
     if (!selectedAddressId)
-      return raiseErrorAlert("Please select a delivery address.");
+      return showError("Please select a delivery address.");
     try {
       await present("Finalizing Order...");
       const response = await placeOrderMutation({
@@ -104,7 +113,7 @@ const Checkout: React.FC = () => {
             variantId: i.variantId,
             quantity: i.quantity,
             price: i.price,
-            finalPrice: i.finalPrice,
+            finalPrice: i.price,
             discType: i.discType,
             discValue: i.discValue,
           })),
@@ -112,19 +121,19 @@ const Checkout: React.FC = () => {
       });
 
       if (response.data?.placeOrder) {
-        raiseSuccessAlert("Order placed successfully.");
+        showSuccess("Order placed successfully.");
         clearCart();
         history.push("/home");
       }
     } catch (err: any) {
-      raiseErrorAlert("Checkout failed.");
+      showError("Checkout failed.");
     } finally {
       dismiss();
     }
   };
 
   const totalPrice = cart.reduce(
-    (sum, i) => sum + i.finalPrice * i.quantity,
+    (sum, i) => sum + i.price * i.quantity,
     0,
   );
 
@@ -248,7 +257,7 @@ const Checkout: React.FC = () => {
                           {item.productName} <em>× {item.quantity}</em>
                         </span>
                         <span className="entry-price">
-                          ₹{(item.finalPrice * item.quantity).toLocaleString()}
+                          ₹{(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     ))}

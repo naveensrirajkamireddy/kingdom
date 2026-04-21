@@ -5,6 +5,13 @@ import {
   HttpLink,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { Preferences } from "@capacitor/preferences";
+
+let cachedToken: string | null = null;
+
+export const setCachedToken = (token: string | null) => {
+  cachedToken = token;
+};
 
 // 1. Create the HTTP Link
 const httpLink = new HttpLink({
@@ -13,15 +20,11 @@ const httpLink = new HttpLink({
 
 // 2. Auth Link: Add Authorization Header
 const authLink = new ApolloLink((operation, forward) => {
-  const token = JSON.parse(
-    sessionStorage.getItem("customerData") as string,
-  )?.authToken; // or sessionStorage if you're storing it there
-
-  if (token) {
+  if (cachedToken) {
     operation.setContext(({ headers = {} }) => ({
       headers: {
         ...headers,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${cachedToken}`,
       },
     }));
   }

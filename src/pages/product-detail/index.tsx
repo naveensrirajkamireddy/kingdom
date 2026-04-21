@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useHistory, useParams } from "react-router";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
-import { IonIcon, IonButton, IonToast } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import {
   cartOutline,
   heartOutline,
@@ -15,7 +15,6 @@ import {
   locationOutline,
   alertCircleOutline,
   cubeOutline,
-  barcodeOutline,
   pricetagOutline,
 } from "ionicons/icons";
 import {
@@ -40,7 +39,6 @@ const ProductDetail: React.FC = () => {
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
     null,
   );
-  const [showToast, setShowToast] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState<string>("");
@@ -71,10 +69,9 @@ const ProductDetail: React.FC = () => {
 
   // --- Computed Logic ---
   const selectedVariant = useMemo(() => {
-    return product?.variants?.find((v) => v.id === selectedVariantId) || null;
+    return product?.variants?.find((v: any) => v.id === selectedVariantId) || null;
   }, [selectedVariantId, product?.variants]);
 
-  // Price Calculation based on variant or fallback to product base prices
   const currentPrice = useMemo(() => {
     if (!selectedVariant)
       return product?.salePrice || product?.purchasePrice || 0;
@@ -89,12 +86,10 @@ const ProductDetail: React.FC = () => {
   const basePrice = selectedVariant?.price || product?.purchasePrice || 0;
   const hasDiscount = currentPrice < basePrice;
 
-  // Stock Calculation
   const isOutOfStock = selectedVariant
     ? selectedVariant.stockQuantity <= 0 || selectedVariant.status === false
     : product?.status === false;
 
-  // Gallery Array Construction (Primary Image + Sub Images)
   const galleryImages = useMemo(() => {
     if (!product) return [];
     const images = [];
@@ -111,11 +106,9 @@ const ProductDetail: React.FC = () => {
 
   // --- Effects ---
   useEffect(() => {
-    // Auto-select first variant on load
     if (product?.variants?.length && !selectedVariantId) {
       setSelectedVariantId(product.variants[0].id);
     }
-    // Set initial display image
     if (galleryImages.length > 0 && !selectedImage) {
       setSelectedImage(galleryImages[0]);
     }
@@ -125,18 +118,12 @@ const ProductDetail: React.FC = () => {
   const handlePincodeCheck = async () => {
     if (pincode.length !== 6) return;
     setPincodeStatus({ loading: true, data: null, error: false });
-
     try {
       const { data } = await checkPincode({
         variables: { pincode: parseFloat(pincode) },
       });
-
       if (data?.checkPincodeAvailability) {
-        setPincodeStatus({
-          loading: false,
-          data: data.checkPincodeAvailability,
-          error: false,
-        });
+        setPincodeStatus({ loading: false, data: data.checkPincodeAvailability, error: false });
       } else {
         setPincodeStatus({ loading: false, data: null, error: true });
       }
@@ -160,80 +147,40 @@ const ProductDetail: React.FC = () => {
         price: currentPrice,
         displayImage: product.primaryImage || galleryImages[0],
       });
-      setShowToast(true);
     }
   };
 
-  // --- Guard Clauses ---
-  if (loading)
-    return (
-      <div className="loader-full">
-        <Spinner animation="border" variant="dark" />
-      </div>
-    );
-  if (error || !product)
-    return (
-      <Alert variant="danger" className="m-5 text-center">
-        Product could not be loaded. Please try again later.
-      </Alert>
-    );
+  if (loading) return <div className="loader-full"><Spinner animation="border" variant="dark" /></div>;
+  if (error || !product) return <Alert variant="danger" className="m-5 text-center">Product could not be loaded. Please try again later.</Alert>;
 
   return (
     <StorefrontLayout>
       <div className="product-page-wrapper">
         <Container className="px-lg-5">
-          {/* Breadcrumb */}
           <div className="pm-breadcrumb">
             <span onClick={() => history.push("/")}>Home</span> /{" "}
             <span onClick={() => history.push("/shop")}>Shop</span> /{" "}
             {product.categoryName && (
-              <>
-                <span
-                  onClick={() => history.push(`/shop/${product.categoryId}`)}
-                >
-                  {product.categoryName}
-                </span>{" "}
-                /{" "}
-              </>
+              <><span onClick={() => history.push(`/shop/${product.categoryId}`)}>{product.categoryName}</span> / </>
             )}
             <span className="current">{product.productName}</span>
           </div>
 
           <Row className="gx-lg-5 mt-4">
-            {/* LEFT: Sticky Gallery */}
             <Col lg={6} xl={7}>
               <div className="sticky-gallery-section">
                 <div className="main-image-container">
-                  <img
-                    src={selectedImage || galleryImages[0]}
-                    alt={product.productName}
-                    className="main-display-image"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = "/no-image.png";
-                    }}
-                  />
+                  <img src={selectedImage || galleryImages[0]} alt={product.productName} className="main-display-image" />
                   <div className="pm-badges-group">
-                    {product.newArrival && (
-                      <span className="pm-badge badge-blue">NEW</span>
-                    )}
-                    {product.featured && (
-                      <span className="pm-badge badge-dark">FEATURED</span>
-                    )}
-                    {hasDiscount && (
-                      <span className="pm-badge badge-orange">SALE</span>
-                    )}
+                    {product.newArrival && <span className="pm-badge badge-blue">NEW</span>}
+                    {product.featured && <span className="pm-badge badge-dark">FEATURED</span>}
+                    {hasDiscount && <span className="pm-badge badge-orange">SALE</span>}
                   </div>
                 </div>
-
                 {galleryImages.length > 1 && (
                   <div className="thumbnail-strip">
                     {galleryImages.map((img: string, i: number) => (
-                      <div
-                        key={i}
-                        className={`thumb-box ${selectedImage === img ? "active" : ""}`}
-                        onClick={() => setSelectedImage(img)}
-                      >
+                      <div key={i} className={`thumb-box ${selectedImage === img ? "active" : ""}`} onClick={() => setSelectedImage(img)}>
                         <img src={img} alt={`view-${i}`} />
                       </div>
                     ))}
@@ -242,36 +189,25 @@ const ProductDetail: React.FC = () => {
               </div>
             </Col>
 
-            {/* RIGHT: Product Details */}
             <Col lg={6} xl={5}>
               <div className="product-details-panel">
                 <div className="title-header-group">
-                  <span className="brand-tag">
-                    {product.brandName || "Premium"}
-                  </span>
+                  <span className="brand-tag">{product.brandName || "Premium"}</span>
                   <div className="title-row">
                     <h1 className="product-title-big">{product.productName}</h1>
-                    <button className="icon-btn-minimal" title="Share">
-                      <IonIcon icon={shareSocialOutline} />
-                    </button>
+                    <button className="icon-btn-minimal" title="Share"><IonIcon icon={shareSocialOutline} /></button>
                   </div>
-                  {product.skuCode && (
-                    <span className="sku-text">SKU: {product.skuCode}</span>
-                  )}
+                  {product.skuCode && <span className="sku-text">SKU: {product.skuCode}</span>}
                 </div>
 
-                {/* Price Block */}
                 <div className="price-tag-row">
                   <span className="new-price">₹{currentPrice.toFixed(2)}</span>
                   {hasDiscount && (
-                    <>
-                      <span className="old-price">₹{basePrice.toFixed(2)}</span>
+                    <><span className="old-price">₹{basePrice.toFixed(2)}</span>
                       {selectedVariant?.discValue && (
                         <span className="discount-tag">
-                          {selectedVariant.discType === "percent" ||
-                          selectedVariant.discType === "percentage"
-                            ? `${selectedVariant.discValue}% OFF`
-                            : `₹${selectedVariant.discValue} OFF`}
+                          {selectedVariant.discType === "percent" || selectedVariant.discType === "percentage"
+                            ? `${selectedVariant.discValue}% OFF` : `₹${selectedVariant.discValue} OFF`}
                         </span>
                       )}
                     </>
@@ -280,36 +216,20 @@ const ProductDetail: React.FC = () => {
 
                 <hr className="pm-divider" />
 
-                {/* Variant Selection */}
                 {product.variants && product.variants.length > 0 && (
                   <div className="variant-picker-section">
-                    <label className="section-label">
-                      Select Option
-                      {selectedVariant &&
-                        selectedVariant.stockQuantity > 0 &&
-                        selectedVariant.stockQuantity <= 5 && (
-                          <span className="stock-warning ml-2">
-                            (Only {selectedVariant.stockQuantity} left!)
-                          </span>
-                        )}
+                    <label className="section-label">Select Option
+                      {selectedVariant && selectedVariant.stockQuantity > 0 && selectedVariant.stockQuantity <= 5 && (
+                        <span className="stock-warning ml-2">(Only {selectedVariant.stockQuantity} left!)</span>
+                      )}
                     </label>
                     <div className="variant-chips">
                       {product.variants.map((v: any) => {
-                        const outOfStock =
-                          v.stockQuantity <= 0 || v.status === "Inactive";
-                        const displayName =
-                          v.variantName ||
-                          [v.color, v.size].filter(Boolean).join(" - ") ||
-                          `Variant ${v.id}`;
-
+                        const outOfStock = v.stockQuantity <= 0 || v.status === "Inactive";
+                        const displayName = v.variantName || [v.color, v.size].filter(Boolean).join(" - ") || `Variant ${v.id}`;
                         return (
-                          <button
-                            key={v.id}
-                            disabled={outOfStock}
-                            className={`variant-chip ${selectedVariantId === v.id ? "active" : ""} ${outOfStock ? "out-of-stock" : ""}`}
-                            onClick={() => setSelectedVariantId(v.id)}
-                          >
-                            {displayName}
+                          <button key={v.id} disabled={outOfStock} className={`variant-chip ${selectedVariantId === v.id ? "active" : ""} ${outOfStock ? "out-of-stock" : ""}`} onClick={() => setSelectedVariantId(v.id)}>
+                            {v.size}
                           </button>
                         );
                       })}
@@ -317,139 +237,40 @@ const ProductDetail: React.FC = () => {
                   </div>
                 )}
 
-                {/* Attributes Grid */}
                 <div className="attribute-grid mt-3">
-                  {product.categoryName && (
-                    <div className="attr-item">
-                      <IonIcon icon={pricetagOutline} />
-                      <span>
-                        <strong>Category:</strong> {product.categoryName}
-                      </span>
-                    </div>
-                  )}
-                  {product.materialName && (
-                    <div className="attr-item">
-                      <IonIcon icon={cubeOutline} />
-                      <span>
-                        <strong>Material:</strong> {product.materialName}
-                      </span>
-                    </div>
-                  )}
-                  {product.patternName && (
-                    <div className="attr-item">
-                      <IonIcon icon={cubeOutline} />
-                      <span>
-                        <strong>Pattern:</strong> {product.patternName}
-                      </span>
-                    </div>
-                  )}
+                  {product.categoryName && <div className="attr-item"><IonIcon icon={pricetagOutline} /><span><strong>Category:</strong> {product.categoryName}</span></div>}
+                  {product.materialName && <div className="attr-item"><IonIcon icon={cubeOutline} /><span><strong>Material:</strong> {product.materialName}</span></div>}
+                  {product.patternName && <div className="attr-item"><IonIcon icon={cubeOutline} /><span><strong>Pattern:</strong> {product.patternName}</span></div>}
+                  {product.variants && product?.variants[0].color && <div className="attr-item"><IonIcon icon={cubeOutline} /><span><strong>Color:</strong> {product.variants[0].color}</span></div>}
                 </div>
 
-                {/* Purchase Actions */}
                 <div className="purchase-actions-container">
                   <div className="qty-selector">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      disabled={isOutOfStock}
-                    >
-                      <IonIcon icon={removeOutline} />
-                    </button>
+                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))} disabled={isOutOfStock}><IonIcon icon={removeOutline} /></button>
                     <span>{quantity}</span>
-                    <button
-                      onClick={() => {
-                        if (
-                          selectedVariant &&
-                          quantity >= selectedVariant.stockQuantity
-                        )
-                          return;
-                        setQuantity(quantity + 1);
-                      }}
-                      disabled={
-                        isOutOfStock ||
-                        (selectedVariant
-                          ? quantity >= selectedVariant.stockQuantity
-                          : false)
-                      }
-                    >
-                      <IonIcon icon={addOutline} />
-                    </button>
+                    <button onClick={() => { if (selectedVariant && quantity >= selectedVariant.stockQuantity) return; setQuantity(quantity + 1); }} disabled={isOutOfStock || (selectedVariant ? quantity >= selectedVariant.stockQuantity : false)}><IonIcon icon={addOutline} /></button>
                   </div>
-
-                  <button
-                    className={`add-to-cart-btn-premium ${isOutOfStock ? "disabled-btn" : ""}`}
-                    onClick={handleAddToCart}
-                    disabled={isOutOfStock}
-                  >
-                    <IonIcon icon={cartOutline} />{" "}
-                    {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-                  </button>
-
-                  <button
-                    className={`wishlist-icon-btn ${isWishlisted ? "active" : ""}`}
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                  >
-                    <IonIcon icon={isWishlisted ? heart : heartOutline} />
-                  </button>
+                  <button className={`add-to-cart-btn-premium ${isOutOfStock ? "disabled-btn" : ""}`} onClick={handleAddToCart} disabled={isOutOfStock}><IonIcon icon={cartOutline} /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}</button>
+                  <button className={`wishlist-icon-btn ${isWishlisted ? "active" : ""}`} onClick={() => setIsWishlisted(!isWishlisted)}><IonIcon icon={isWishlisted ? heart : heartOutline} /></button>
                 </div>
 
                 <hr className="pm-divider" />
 
-                {/* PINCODE CHECKER */}
                 <div className="pincode-checker-box">
-                  <div className="pincode-header">
-                    <IonIcon icon={locationOutline} />
-                    <span>Check Delivery Eligibility</span>
-                  </div>
+                  <div className="pincode-header"><IonIcon icon={locationOutline} /><span>Check Delivery Eligibility</span></div>
                   <div className="pincode-input-wrapper">
-                    <input
-                      type="tel"
-                      maxLength={6}
-                      placeholder="Enter 6-digit Pincode"
-                      value={pincode}
-                      onChange={(e) =>
-                        setPincode(e.target.value.replace(/\D/g, ""))
-                      }
-                    />
-                    <button
-                      disabled={pincode.length !== 6 || pincodeStatus.loading}
-                      onClick={handlePincodeCheck}
-                    >
-                      {pincodeStatus.loading ? "..." : "Check"}
-                    </button>
+                    <input type="tel" maxLength={6} placeholder="Enter 6-digit Pincode" value={pincode} onChange={(e) => setPincode(e.target.value.replace(/\D/g, ""))} />
+                    <button disabled={pincode.length !== 6 || pincodeStatus.loading} onClick={handlePincodeCheck}>{pincodeStatus.loading ? "..." : "Check"}</button>
                   </div>
-                  {pincodeStatus.data && (
-                    <div className="pincode-result success">
-                      <IonIcon icon={checkmarkCircleOutline} />
-                      <div className="res-meta">
-                        <strong>
-                          Delivery available to{" "}
-                          {pincodeStatus.data.delivery_codes[0]?.postal_code
-                            ?.city || pincode}
-                        </strong>
-                      </div>
-                    </div>
-                  )}
-                  {pincodeStatus.error && (
-                    <div className="pincode-result error">
-                      <IonIcon icon={alertCircleOutline} />
-                      <span>Not serviceable for this location.</span>
-                    </div>
-                  )}
+                  {pincodeStatus.data && <div className="pincode-result success"><IonIcon icon={checkmarkCircleOutline} /><strong>Delivery available to {pincodeStatus.data.delivery_codes[0]?.postal_code?.city || pincode}</strong></div>}
+                  {pincodeStatus.error && <div className="pincode-result error"><IonIcon icon={alertCircleOutline} /><span>Not serviceable for this location.</span></div>}
                 </div>
 
-                {/* Trust Signals */}
                 <div className="trust-signals">
-                  <div className="signal">
-                    <IonIcon icon={shieldCheckmarkOutline} />
-                    <span>100% Secure Checkout</span>
-                  </div>
-                  <div className="signal">
-                    <IonIcon icon={repeatOutline} />
-                    <span>7 Days Easy Return</span>
-                  </div>
+                  <div className="signal"><IonIcon icon={shieldCheckmarkOutline} /><span>100% Secure Checkout</span></div>
+                  <div className="signal"><IonIcon icon={repeatOutline} /><span>7 Days Easy Return</span></div>
                 </div>
 
-                {/* Description */}
                 {product.description && (
                   <div className="product-description-area">
                     <h6 className="section-label">Product Details</h6>
@@ -460,27 +281,12 @@ const ProductDetail: React.FC = () => {
             </Col>
           </Row>
 
-          {/* Related Products */}
           <section className="related-products-section">
-            <div className="section-title-wrapper">
-              <h2 className="main-title">You May Also Like</h2>
-            </div>
-            {relatedData?.productsList && (
-              <Products list={relatedData.productsList} />
-            )}
+            <div className="section-title-wrapper"><h2 className="main-title">You May Also Like</h2></div>
+            {relatedData?.productsList && <Products list={relatedData.productsList} />}
           </section>
         </Container>
       </div>
-
-      <IonToast
-        isOpen={showToast}
-        onDidDismiss={() => setShowToast(false)}
-        message="Successfully added to your cart!"
-        duration={2000}
-        color="dark"
-        icon={checkmarkCircleOutline}
-        position="bottom"
-      />
     </StorefrontLayout>
   );
 };

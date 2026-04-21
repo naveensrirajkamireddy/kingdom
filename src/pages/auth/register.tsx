@@ -5,10 +5,11 @@ import { Link, useHistory } from "react-router-dom";
 import styles from "./AuthCard.module.css";
 import StorefrontLayout from "../layout";
 import { useCreateCustomerMutation } from "../../graphql/generated";
-import { raiseErrorAlert, raiseSuccessAlert } from "../../utils";
+import { useToast } from "../../context/toastContext";
 
 const Register = () => {
   const history = useHistory();
+  const { showSuccess, showError } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     customerName: "",
@@ -19,8 +20,32 @@ const Register = () => {
 
   const [registrationMutation, { loading }] = useCreateCustomerMutation();
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/; // Basic 10 digit check
+    
+    if (formData.customerName.trim().length < 3) {
+      showError("Name must be at least 3 characters long.");
+      return false;
+    }
+    if (!emailRegex.test(formData.email)) {
+      showError("Please enter a valid email address.");
+      return false;
+    }
+    if (!phoneRegex.test(formData.mobile)) {
+      showError("Please enter a valid 10-digit mobile number.");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      showError("Password must be at least 6 characters long.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
     try {
       const response = await registrationMutation({
@@ -28,7 +53,7 @@ const Register = () => {
       });
 
       if (response.data?.createCustomer) {
-        raiseSuccessAlert("Account created! Welcome to the Kingdom.");
+        showSuccess("Account created! Welcome to the Kingdom.");
         history.push("/login");
       }
     } catch (error: any) {
@@ -40,7 +65,7 @@ const Register = () => {
           .replace("GraphQL error: ", "")
           .trim();
       }
-      raiseErrorAlert(cleanMessage);
+      showError(cleanMessage);
     }
   };
 

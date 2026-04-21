@@ -3,15 +3,22 @@ import { IonSpinner } from "@ionic/react";
 import { Link } from "react-router-dom";
 import styles from "./AuthCard.module.css";
 import StorefrontLayout from "../layout";
-import { raiseSuccessAlert } from "../../utils"; // Assuming you have this!
+import { useToast } from "../../context/toastContext";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showError("Please enter a valid email address.");
+      return;
+    }
 
     setLoading(true);
 
@@ -21,10 +28,11 @@ const ForgotPassword = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 1500)); // Mock API delay
 
-      raiseSuccessAlert("If an account exists, a reset link has been sent.");
+      showSuccess("If an account exists, a reset link has been sent.");
       setEmail(""); // Clear the input after success
     } catch (error) {
       console.error("Reset error:", error);
+      showError("Failed to initiate password reset.");
     } finally {
       setLoading(false);
     }

@@ -104,9 +104,7 @@ const OrdersPage: React.FC = () => {
                     </p>
                     <h5 className="order-total-price">
                       ₹
-                      {order.totalAmount?.toLocaleString() ||
-                        order.total?.toLocaleString() ||
-                        "0.00"}
+                      {parseFloat(order.totalAmount || order.total || "0.00").toFixed(2)}
                     </h5>
                   </div>
                 </div>

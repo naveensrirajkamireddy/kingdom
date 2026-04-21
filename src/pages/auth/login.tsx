@@ -6,17 +6,32 @@ import styles from "./AuthCard.module.css";
 import StorefrontLayout from "../layout";
 import { useLoginCustomerMutation } from "../../graphql/generated";
 import { useUser } from "../../context/userContext";
-import { raiseErrorAlert } from "../../utils";
+import { useToast } from "../../context/toastContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
   const { setUser } = useUser();
+  const { showError, showSuccess } = useToast();
   const [loginMutation, { loading }] = useLoginCustomerMutation();
+
+  const validateForm = () => {
+    if (formData.username.trim().length < 3) {
+      showError("Please enter a valid email or mobile number.");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      showError("Password must be at least 6 characters.");
+      return false;
+    }
+    return true;
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
       const result = await loginMutation({
         variables: formData,
@@ -24,7 +39,7 @@ const Login = () => {
       const user = result.data?.loginCustomer;
       if (user) {
         setUser(user);
-        sessionStorage.setItem("customerData", JSON.stringify(user));
+        showSuccess("Welcome back!");
         history.push("/home"); // or /account
       }
     } catch (error: any) {
@@ -36,7 +51,7 @@ const Login = () => {
           .replace("GraphQL error: ", "")
           .trim();
       }
-      raiseErrorAlert(cleanMessage);
+      showError(cleanMessage);
     }
   };
 
